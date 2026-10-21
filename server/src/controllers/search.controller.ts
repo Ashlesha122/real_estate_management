@@ -117,7 +117,7 @@ export class SearchController {
 
   async getDetail(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findByIdWithDetails(req.params.id);
+      const property = await propertyRepository.findByIdWithDetails((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       // Only show non-draft properties publicly
@@ -128,15 +128,15 @@ export class SearchController {
       }
 
       // Increment view count
-      await propertyRepository.incrementViewCount(req.params.id);
+      await propertyRepository.incrementViewCount((req.params.id as string));
 
       // Get media
-      const media = await propertyRepository.findMediaByPropertyId(req.params.id);
+      const media = await propertyRepository.findMediaByPropertyId((req.params.id as string));
 
       // Check if wishlisted by current user
       let isWishlisted = false;
       if (req.user) {
-        isWishlisted = await wishlistRepository.isWishlisted(req.user.id, req.params.id);
+        isWishlisted = await wishlistRepository.isWishlisted(req.user.id, (req.params.id as string));
       }
 
       res.json({

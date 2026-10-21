@@ -1,4 +1,4 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 import { config } from '../config';
 import { UserRole } from '@estateflow/shared';
 
@@ -18,14 +18,14 @@ class TokenService {
   signAccessToken(payload: TokenPayload): string {
     return jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.accessExpiry,
-    });
+    } as SignOptions);
   }
 
   signRefreshToken(userId: string): string {
     const payload: RefreshTokenPayload = { id: userId, type: 'refresh' };
     return jwt.sign(payload, config.jwt.secret, {
       expiresIn: config.jwt.refreshExpiry,
-    });
+    } as SignOptions);
   }
 
   verifyAccessToken(token: string): TokenPayload {

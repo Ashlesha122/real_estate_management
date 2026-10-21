@@ -66,7 +66,7 @@ export class PropertyController {
 
   async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       // Ownership check: owners can see their own, brokers their assigned
@@ -89,13 +89,13 @@ export class PropertyController {
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       this.checkAccess(req.user!, property);
 
       const data = createPropertySchema.partial().parse(req.body);
-      const updated = await propertyRepository.update(req.params.id, data as Record<string, unknown>);
+      const updated = await propertyRepository.update((req.params.id as string), data as Record<string, unknown>);
 
       res.json(updated);
     } catch (error) {
@@ -105,7 +105,7 @@ export class PropertyController {
 
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       if (property.owner_id !== req.user!.id) {
@@ -116,7 +116,7 @@ export class PropertyController {
         throw new ValidationError('Only DRAFT or INACTIVE properties can be deleted');
       }
 
-      await propertyRepository.delete(req.params.id);
+      await propertyRepository.delete((req.params.id as string));
       res.json({ message: 'Property deleted successfully' });
     } catch (error) {
       next(error);
@@ -125,7 +125,7 @@ export class PropertyController {
 
   async publish(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       if (property.owner_id !== req.user!.id) {
@@ -144,7 +144,7 @@ export class PropertyController {
       if (!property.asking_price || property.asking_price <= 0) errors.askingPrice = ['Valid asking price is required'];
       if (!property.latitude || !property.longitude) errors.location = ['Location coordinates are required'];
 
-      const mediaCount = await propertyRepository.getMediaCount(req.params.id);
+      const mediaCount = await propertyRepository.getMediaCount((req.params.id as string));
       if (mediaCount === 0) errors.media = ['At least one image is required'];
 
       if (property.handling_mode === 'BROKER_ASSISTED' && !property.broker_id) {
@@ -155,9 +155,9 @@ export class PropertyController {
         throw new ValidationError('Property does not meet publishing requirements', errors);
       }
 
-      await propertyRepository.updateStatus(req.params.id, 'ACTIVE', true);
+      await propertyRepository.updateStatus((req.params.id as string), 'ACTIVE', true);
       await propertyRepository.addStatusHistory({
-        propertyId: req.params.id,
+        propertyId: (req.params.id as string),
         fromStatus: 'DRAFT',
         toStatus: 'ACTIVE',
         changedBy: req.user!.id,
@@ -185,7 +185,7 @@ export class PropertyController {
   async updateStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { status: newStatus } = updateStatusSchema.parse(req.body);
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
 
       this.checkAccess(req.user!, property);
@@ -197,9 +197,9 @@ export class PropertyController {
       }
 
       const publishOnActivate = newStatus === PropertyStatus.ACTIVE && currentStatus === PropertyStatus.INACTIVE;
-      await propertyRepository.updateStatus(req.params.id, newStatus, publishOnActivate);
+      await propertyRepository.updateStatus((req.params.id as string), newStatus, publishOnActivate);
       await propertyRepository.addStatusHistory({
-        propertyId: req.params.id,
+        propertyId: (req.params.id as string),
         fromStatus: currentStatus,
         toStatus: newStatus,
         changedBy: req.user!.id,
@@ -213,7 +213,7 @@ export class PropertyController {
 
   async uploadMedia(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
       this.checkAccess(req.user!, property);
 
@@ -222,7 +222,7 @@ export class PropertyController {
         throw new ValidationError('No files uploaded');
       }
 
-      const existingMedia = await propertyRepository.findMediaByPropertyId(req.params.id);
+      const existingMedia = await propertyRepository.findMediaByPropertyId((req.params.id as string));
       const startOrder = existingMedia.length;
 
       const mediaRecords = [];
@@ -232,7 +232,7 @@ export class PropertyController {
         const isCover = existingMedia.length === 0 && i === 0;
 
         const media = await propertyRepository.addMedia({
-          propertyId: req.params.id,
+          propertyId: (req.params.id as string),
           url: `/uploads/${file.filename}`,
           mediaType,
           sortOrder: startOrder + i,
@@ -249,11 +249,11 @@ export class PropertyController {
 
   async deleteMedia(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
       this.checkAccess(req.user!, property);
 
-      const media = await propertyRepository.deleteMedia(req.params.mediaId);
+      const media = await propertyRepository.deleteMedia((req.params.mediaId as string));
       if (!media) throw new NotFoundError('Media');
 
       res.json({ message: 'Media deleted successfully' });
@@ -264,12 +264,12 @@ export class PropertyController {
 
   async reorderMedia(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const property = await propertyRepository.findById(req.params.id);
+      const property = await propertyRepository.findById((req.params.id as string));
       if (!property) throw new NotFoundError('Property');
       this.checkAccess(req.user!, property);
 
       const { mediaIds } = reorderMediaSchema.parse(req.body);
-      await propertyRepository.reorderMedia(req.params.id, mediaIds);
+      await propertyRepository.reorderMedia((req.params.id as string), mediaIds);
 
       res.json({ message: 'Media reordered successfully' });
     } catch (error) {
