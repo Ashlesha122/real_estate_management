@@ -1,0 +1,28 @@
+{
+  "name": "estateflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EstateFlow — Real estate management platform connecting property seekers with owners and brokers",
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=shared && npm run build --workspace=server && npm run build --workspace=client",
+    "test": "npm run test --workspace=server",
+    "test:e2e": "npm run test:e2e --workspace=client",
+    "lint": "npm run lint --workspace=server && npm run lint --workspace=client",
+    "db:migrate": "npm run migrate:up --workspace=server",
+    "db:migrate:down": "npm run migrate:down --workspace=server",
+    "db:seed": "npm run seed --workspace=server",
+    "db:seed:perf": "npm run seed:perf --workspace=server",
+    "db:benchmark": "npm run benchmark --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
