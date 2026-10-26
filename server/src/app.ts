@@ -8,6 +8,7 @@ import { config } from './config';
 import { generalLimiter } from './middleware/rateLimiter';
 import { errorHandler } from './middleware/errorHandler';
 import { searchController } from './controllers/search.controller';
+import { authenticate } from './middleware/auth';
 
 // Route imports
 import authRoutes from './routes/auth.routes';
@@ -30,8 +31,21 @@ const app = express();
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
+
+// Robust CORS allowing localhost and 127.0.0.1 on all common dev/preview ports
 app.use(cors({
-  origin: config.clientUrl,
+  origin: (requestOrigin, callback) => {
+    if (!requestOrigin) return callback(null, true);
+    if (
+      requestOrigin === config.clientUrl ||
+      requestOrigin.startsWith('http://localhost:') ||
+      requestOrigin.startsWith('http://127.0.0.1:') ||
+      requestOrigin.includes('estateflow')
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Dev-friendly permissive
+  },
   credentials: true,
 }));
 
@@ -48,12 +62,25 @@ if (config.nodeEnv !== 'test') {
 // Rate limiting
 app.use('/api/', generalLimiter);
 
-// Static files - serve uploads
-app.use('/uploads', express.static(path.resolve(config.upload.dir)));
+// Static files - serve uploads from both possible upload directories
+const uploadDir = path.resolve(config.upload.dir);
+app.use('/uploads', express.static(uploadDir));
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.resolve(__dirname, '../../uploads')));
 
 // Health check
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Property detail route (public, with optional auth)
+app.get('/api/v1/properties/:id/detail', (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    authenticate(req, res, () => searchController.getDetail(req, res, next));
+  } else {
+    searchController.getDetail(req, res, next);
+  }
 });
 
 // API Routes
@@ -70,17 +97,6 @@ app.use('/api/v1/visits', visitRoutes);
 app.use('/api/v1/availability', availabilityRoutes);
 app.use('/api/v1/lease-records', leaseRecordRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
-
-// Property detail route (public, with optional auth)
-app.get('/api/v1/properties/:id/detail', (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const { authenticate } = require('./middleware/auth');
-    authenticate(req, res, () => searchController.getDetail(req, res, next));
-  } else {
-    searchController.getDetail(req, res, next);
-  }
-});
 
 // API docs placeholder
 app.get('/api/docs', (_req, res) => {

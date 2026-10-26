@@ -218,30 +218,41 @@ export class PropertyController {
       this.checkAccess(req.user!, property);
 
       const files = req.files as Express.Multer.File[];
-      if (!files || files.length === 0) {
-        throw new ValidationError('No files uploaded');
-      }
-
       const existingMedia = await propertyRepository.findMediaByPropertyId((req.params.id as string));
       const startOrder = existingMedia.length;
 
-      const mediaRecords = [];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const mediaType = file.mimetype === 'application/pdf' ? 'BROCHURE' : 'IMAGE';
-        const isCover = existingMedia.length === 0 && i === 0;
+      if (files && files.length > 0) {
+        const mediaRecords = [];
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const mediaType = file.mimetype === 'application/pdf' ? 'BROCHURE' : 'IMAGE';
+          const isCover = existingMedia.length === 0 && i === 0;
 
+          const media = await propertyRepository.addMedia({
+            propertyId: (req.params.id as string),
+            url: `/uploads/${file.filename}`,
+            mediaType,
+            sortOrder: startOrder + i,
+            isCover,
+          });
+          mediaRecords.push(media);
+        }
+        res.status(201).json(mediaRecords);
+        return;
+      } else if (req.body.url) {
+        const isCover = req.body.isCover !== undefined ? Boolean(req.body.isCover) : (existingMedia.length === 0);
         const media = await propertyRepository.addMedia({
           propertyId: (req.params.id as string),
-          url: `/uploads/${file.filename}`,
-          mediaType,
-          sortOrder: startOrder + i,
+          url: req.body.url,
+          mediaType: req.body.mediaType || 'IMAGE',
+          sortOrder: req.body.sortOrder !== undefined ? Number(req.body.sortOrder) : startOrder,
           isCover,
         });
-        mediaRecords.push(media);
+        res.status(201).json(media);
+        return;
+      } else {
+        throw new ValidationError('No files or media URL provided');
       }
-
-      res.status(201).json(mediaRecords);
     } catch (error) {
       next(error);
     }

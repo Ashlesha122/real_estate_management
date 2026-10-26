@@ -27,8 +27,8 @@ export default function VerifyOtp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.length < 4) {
-      toast.error('Please enter a valid OTP');
+    if (code.trim().length !== 6) {
+      toast.error('Please enter a 6-digit verification code');
       return;
     }
 

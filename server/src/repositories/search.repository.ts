@@ -2,9 +2,9 @@ import { query } from '../config/database';
 
 class SearchRepository {
   async radiusSearch(params: {
-    lat: number;
-    lng: number;
-    radiusMeters: number;
+    lat?: number;
+    lng?: number;
+    radiusMeters?: number;
     filters: Record<string, unknown>;
     limit: number;
     offset: number;
@@ -12,31 +12,40 @@ class SearchRepository {
   }): Promise<{ rows: unknown[]; total: number }> {
     const { lat, lng, radiusMeters, filters, limit, offset, sort } = params;
     const conditions: string[] = [`p.status = 'ACTIVE'`];
-    const values: unknown[] = [lng, lat, radiusMeters];
-    let idx = 4;
+    const values: unknown[] = [];
+    let idx = 1;
 
-    conditions.push(`ST_DWithin(p.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3)`);
+    const hasLocation = lat !== undefined && lng !== undefined && radiusMeters !== undefined;
+    if (hasLocation) {
+      values.push(lng, lat, radiusMeters);
+      conditions.push(`ST_DWithin(p.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3)`);
+      idx = 4;
+    }
 
     this.buildFilterConditions(filters, conditions, values, idx);
     idx = values.length + 1;
 
     const whereClause = conditions.join(' AND ');
-    let orderBy = 'distance ASC';
+    let orderBy = 'p.published_at DESC NULLS LAST';
     if (sort === 'price_asc') orderBy = 'p.asking_price ASC';
     else if (sort === 'price_desc') orderBy = 'p.asking_price DESC';
-    else if (sort === 'newest') orderBy = 'p.published_at DESC NULLS LAST';
+    else if (sort === 'distance' && hasLocation) orderBy = 'distance ASC';
 
     const countSql = `
       SELECT COUNT(*) FROM properties p WHERE ${whereClause}
     `;
-    const countResult = await query(countSql, values);
+    const countResult = await query(countSql, [...values]);
     const total = parseInt(countResult.rows[0].count, 10);
+
+    const distanceExpr = hasLocation
+      ? `ST_Distance(p.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) as distance`
+      : `NULL as distance`;
 
     const searchSql = `
       SELECT p.*,
              ST_Y(p.location::geometry) as latitude,
              ST_X(p.location::geometry) as longitude,
-             ST_Distance(p.location, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) as distance,
+             ${distanceExpr},
              (SELECT url FROM property_media pm WHERE pm.property_id = p.id AND pm.is_cover = true LIMIT 1) as cover_image_url
       FROM properties p
       WHERE ${whereClause}

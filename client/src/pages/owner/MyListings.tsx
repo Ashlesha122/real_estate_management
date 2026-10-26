@@ -76,7 +76,8 @@ export default function MyListings() {
     setSelectedPropertyForBroker(property);
     try {
       const res = await api.get('/brokers');
-      setBrokers(res.data || []);
+      const brokerList = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      setBrokers(brokerList);
     } catch {
       toast.error('Failed to load verified brokers');
     }

@@ -1,6 +1,6 @@
 import { config } from './config';
 import { logger } from './config/logger';
-import { pool } from './config/database';
+import { pool, checkDatabaseConnection } from './config/database';
 import app from './app';
 import fs from 'fs';
 import path from 'path';
@@ -12,16 +12,11 @@ async function main() {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  // Test database connection
-  try {
-    const result = await pool.query('SELECT NOW()');
-    logger.info({ time: result.rows[0].now }, 'Database connected');
-  } catch (error) {
-    logger.warn('Database not available yet — server will start anyway');
-  }
+  // Check database connection (activates fallback if PostgreSQL is offline)
+  await checkDatabaseConnection();
 
   // Start server
-  const server = app.listen(config.port, () => {
+  const server = app.listen(config.port, '0.0.0.0', () => {
     logger.info(`EstateFlow server running on port ${config.port}`);
     logger.info(`Environment: ${config.nodeEnv}`);
     logger.info(`Client URL: ${config.clientUrl}`);
@@ -32,7 +27,7 @@ async function main() {
   const shutdown = async () => {
     logger.info('Shutting down...');
     server.close();
-    await pool.end();
+    try { await pool.end(); } catch {}
     process.exit(0);
   };
 

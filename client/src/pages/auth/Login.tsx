@@ -100,6 +100,36 @@ export default function Login() {
           </button>
         </form>
 
+        {/* Demo Account Quick Buttons */}
+        <div className="mt-5 p-3.5 bg-estate-50 rounded-xl border border-estate-200 text-left space-y-2">
+          <span className="text-[11px] font-bold text-estate-500 uppercase tracking-wider block">
+            Quick Demo Login:
+          </span>
+          <div className="grid grid-cols-3 gap-1.5">
+            <button
+              type="button"
+              onClick={() => { setEmail('buyer@estateflow.com'); setPassword('Password123!'); }}
+              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+            >
+              Buyer
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('owner@estateflow.com'); setPassword('Password123!'); }}
+              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+            >
+              Owner
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('broker@estateflow.com'); setPassword('Password123!'); }}
+              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+            >
+              Broker
+            </button>
+          </div>
+        </div>
+
         <div className="mt-6 pt-6 border-t border-estate-100 text-center">
           <p className="text-xs text-estate-600">
             Don't have an account yet?{' '}

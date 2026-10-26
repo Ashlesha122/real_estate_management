@@ -9,7 +9,7 @@ import { parsePagination, buildPaginatedResponse } from '../utils/pagination';
 const searchQuerySchema = z.object({
   lat: z.coerce.number().min(-90).max(90).optional(),
   lng: z.coerce.number().min(-180).max(180).optional(),
-  radius: z.coerce.number().min(1).max(50).default(5),
+  radius: z.coerce.number().min(1).max(500).default(50),
   purpose: z.string().optional(),
   type: z.string().optional(),
   minPrice: z.coerce.number().optional(),
@@ -23,7 +23,7 @@ const searchQuerySchema = z.object({
   zeroBrokerage: z.coerce.boolean().optional(),
   city: z.string().optional(),
   locality: z.string().optional(),
-  sort: z.enum(['distance', 'price_asc', 'price_desc', 'newest']).default('distance'),
+  sort: z.enum(['distance', 'price_asc', 'price_desc', 'newest']).default('newest'),
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
@@ -49,10 +49,10 @@ export class SearchController {
     try {
       const params = searchQuerySchema.parse(req.query);
 
-      // Default to a central India location if no coordinates provided
-      const lat = params.lat ?? 20.5937;
-      const lng = params.lng ?? 78.9629;
-      const radiusMeters = params.radius * 1000;
+      const hasCoords = params.lat !== undefined && params.lng !== undefined;
+      const lat = hasCoords ? params.lat : undefined;
+      const lng = hasCoords ? params.lng : undefined;
+      const radiusMeters = hasCoords ? params.radius * 1000 : undefined;
 
       const filters: Record<string, unknown> = {};
       if (params.purpose) filters.purpose = params.purpose;
