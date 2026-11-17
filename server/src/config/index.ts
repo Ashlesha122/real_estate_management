@@ -1,10 +1,25 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+// Check common locations for .env file
+const candidateEnvPaths = [
+  path.resolve(process.cwd(), '.env'),
+  path.resolve(process.cwd(), '../.env'),
+  path.resolve(__dirname, '../../../.env'),
+  path.resolve(__dirname, '../../../../.env'),
+  path.resolve(__dirname, '../../.env'),
+];
 
-function required(key: string): string {
-  const val = process.env[key];
+for (const envPath of candidateEnvPaths) {
+  if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+    break;
+  }
+}
+
+function required(key: string, fallback?: string): string {
+  const val = process.env[key] || fallback;
   if (!val) {
     throw new Error(`Missing required environment variable: ${key}`);
   }
@@ -26,7 +41,7 @@ export const config = {
   clientUrl: optional('CLIENT_URL', 'http://localhost:5173'),
 
   database: {
-    url: required('DATABASE_URL'),
+    url: optional('DATABASE_URL', 'postgresql://estateflow:estateflow_dev@localhost:5432/estateflow'),
     host: optional('DB_HOST', 'localhost'),
     port: optionalInt('DB_PORT', 5432),
     name: optional('DB_NAME', 'estateflow'),
@@ -35,7 +50,7 @@ export const config = {
   },
 
   jwt: {
-    secret: required('JWT_SECRET'),
+    secret: optional('JWT_SECRET', 'change-me-to-a-random-64-char-string-in-production-estateflow-2026'),
     accessExpiry: optional('JWT_ACCESS_EXPIRY', '15m'),
     refreshExpiry: optional('JWT_REFRESH_EXPIRY', '7d'),
   },

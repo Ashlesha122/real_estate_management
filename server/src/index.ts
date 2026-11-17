@@ -25,8 +25,15 @@ async function main() {
 
   // Graceful shutdown
   const shutdown = async () => {
-    logger.info('Shutting down...');
+    logger.info('Shutting down gracefully...');
     server.close();
+    try {
+      const { memoryDb } = await import('./config/memoryDb');
+      memoryDb.saveToDisk();
+      logger.info('Database state saved to disk');
+    } catch (e) {
+      logger.warn({ error: e }, 'Failed to save database state on shutdown');
+    }
     try { await pool.end(); } catch {}
     process.exit(0);
   };

@@ -33,9 +33,28 @@ import BrokerDashboard from './pages/broker/BrokerDashboard';
 
 function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: UserRole[] }) {
   const { isAuthenticated, isLoading, user } = useAuth();
-  if (isLoading) return <div className="flex items-center justify-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" /></div>;
-  if (!isAuthenticated) return <Navigate to="/login" />;
-  if (roles && user && !roles.includes(user.role)) return <Navigate to="/" />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-estate-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+      </div>
+    );
+  }
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (roles && user && !roles.includes(user.role)) return <Navigate to="/dashboard" replace />;
+  return <>{children}</>;
+}
+
+function PublicAuthRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-estate-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+      </div>
+    );
+  }
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
   return <>{children}</>;
 }
 
@@ -45,11 +64,14 @@ export default function App() {
       <Navbar />
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/properties/:id" element={<PropertyDetailPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          {/* Public Auth Routes (Redirect to /dashboard if already signed in) */}
+          <Route path="/login" element={<PublicAuthRoute><Login /></PublicAuthRoute>} />
+          <Route path="/register" element={<PublicAuthRoute><Register /></PublicAuthRoute>} />
+
+          {/* Secure Application Routes (Authentication Required First) */}
+          <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+          <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+          <Route path="/properties/:id" element={<ProtectedRoute><PropertyDetailPage /></ProtectedRoute>} />
           <Route path="/verify" element={<ProtectedRoute><VerifyOtp /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
@@ -70,9 +92,9 @@ export default function App() {
           <Route path="/dashboard/broker" element={<ProtectedRoute roles={[UserRole.BROKER]}><BrokerDashboard /></ProtectedRoute>} />
 
           {/* Dashboard redirect */}
-          <Route path="/dashboard" element={<DashboardRedirect />} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardRedirect /></ProtectedRoute>} />
 
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       <Footer />
@@ -82,9 +104,9 @@ export default function App() {
 
 function DashboardRedirect() {
   const { user } = useAuth();
-  if (!user) return <Navigate to="/login" />;
-  if (user.role === UserRole.BUYER) return <Navigate to="/dashboard/buyer" />;
-  if (user.role === UserRole.OWNER) return <Navigate to="/dashboard/owner" />;
-  if (user.role === UserRole.BROKER) return <Navigate to="/dashboard/broker" />;
-  return <Navigate to="/" />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.role === UserRole.BUYER) return <Navigate to="/dashboard/buyer" replace />;
+  if (user.role === UserRole.OWNER) return <Navigate to="/dashboard/owner" replace />;
+  if (user.role === UserRole.BROKER) return <Navigate to="/dashboard/broker" replace />;
+  return <Navigate to="/search" replace />;
 }

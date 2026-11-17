@@ -45,13 +45,12 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       }
       const limit = Number(params[pIdx++]) || 20;
       const offset = Number(params[pIdx++]) || 0;
-      const page = list.slice(offset, offset + limit);
+      const page = list.slice(offset, offset + limit).map(({ password_hash, ...safe }) => safe);
       return { rows: page, rowCount: page.length };
     }
   }
 
   if (normalized.startsWith('INSERT INTO users')) {
-    // [data.email, data.phone, data.passwordHash, data.fullName, data.role]
     const newUser: MemoryUser = {
       id: uuidv4(),
       email: params[0] as string,
@@ -66,6 +65,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       updated_at: new Date(),
     };
     memoryDb.users.push(newUser);
+    memoryDb.saveToDisk();
     return { rows: [newUser], rowCount: 1 };
   }
 
@@ -77,27 +77,40 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     if (normalized.includes('phone_verified = true')) {
       user.phone_verified = true;
       user.updated_at = new Date();
+      memoryDb.saveToDisk();
       return { rows: [user], rowCount: 1 };
     }
 
     if (normalized.includes('password_hash = $1')) {
       user.password_hash = params[0] as string;
       user.updated_at = new Date();
+      memoryDb.saveToDisk();
       return { rows: [user], rowCount: 1 };
     }
 
     if (normalized.includes('avatar_url = $1')) {
       user.avatar_url = params[0] as string;
       user.updated_at = new Date();
+      memoryDb.saveToDisk();
       return { rows: [user], rowCount: 1 };
     }
 
     // Dynamic profile update
-    let pIdx = 0;
-    if (normalized.includes('full_name =')) user.full_name = params[pIdx++] as string;
-    if (normalized.includes('phone =')) user.phone = params[pIdx++] as string;
-    if (normalized.includes('contact_preference =')) user.contact_preference = params[pIdx++] as string;
+    const setMatch = normalized.match(/UPDATE users SET (.*) WHERE/i);
+    if (setMatch) {
+      const setClauses = setMatch[1].split(',').map(s => s.trim());
+      setClauses.forEach((clause) => {
+        const colMatch = clause.match(/^([a-z_]+)\s*=\s*\$(\d+)/i);
+        if (colMatch) {
+          const col = colMatch[1];
+          const pIdx = parseInt(colMatch[2], 10) - 1;
+          const val = params[pIdx];
+          (user as any)[col] = val;
+        }
+      });
+    }
     user.updated_at = new Date();
+    memoryDb.saveToDisk();
     return { rows: [user], rowCount: 1 };
   }
 
@@ -119,6 +132,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
         owner_email: owner?.email,
         broker_name: broker?.full_name || null,
         broker_phone: broker?.phone || null,
+        inquiry_count: memoryDb.inquiries.filter(i => i.property_id === prop.id).length,
       };
       return { rows: [row], rowCount: 1 };
     }
@@ -139,24 +153,135 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       list = list.filter(p => p.broker_id === brokerId && p.status !== 'DRAFT');
     }
 
+    // Status filter in findByOwnerId
+    const statusMatch = normalized.match(/p\.status\s*=\s*\$(\d+)/i);
+    if (statusMatch) {
+      const sIdx = parseInt(statusMatch[1], 10) - 1;
+      const statVal = params[sIdx] as string;
+      if (statVal && statVal !== 'ALL') {
+        list = list.filter(p => p.status === statVal);
+      }
+    }
+
     // Dynamic filter matching for search
     for (let i = 0; i < params.length; i++) {
       const val = params[i];
       if (typeof val === 'string') {
-        if (['SALE', 'RENT'].includes(val)) list = list.filter(p => p.purpose === val);
-        else if (['APARTMENT', 'VILLA', 'INDEPENDENT_HOUSE', 'PLOT', 'COMMERCIAL', 'PG', 'FARMHOUSE'].includes(val)) {
-          list = list.filter(p => p.type === val);
-        } else if (['UNFURNISHED', 'SEMI_FURNISHED', 'FULLY_FURNISHED'].includes(val)) {
-          list = list.filter(p => p.furnishing === val);
-        } else if (val.startsWith('%') && val.endsWith('%')) {
-          const s = val.replace(/%/g, '').toLowerCase();
-          list = list.filter(p => (p.city && p.city.toLowerCase().includes(s)) || (p.locality && p.locality.toLowerCase().includes(s)));
+        const upper = val.toUpperCase();
+        if (['SALE', 'RENT'].includes(upper)) {
+          list = list.filter(p => p.purpose === upper);
+        } else if (['APARTMENT', 'VILLA', 'INDEPENDENT_HOUSE', 'PLOT', 'COMMERCIAL', 'PG', 'FARMHOUSE'].includes(upper)) {
+          list = list.filter(p => p.type === upper);
+        } else if (['UNFURNISHED', 'SEMI_FURNISHED', 'FULLY_FURNISHED'].includes(upper)) {
+          list = list.filter(p => p.furnishing === upper);
         }
+      } else if (Array.isArray(val) && val.length > 0) {
+        // Amenities array filter
+        list = list.filter(p => Array.isArray(p.amenities) && val.every((a: string) => p.amenities.includes(a)));
+      }
+    }
+
+    // Specific city filter (p.city ILIKE $x)
+    const cityMatch = normalized.match(/p\.city\s+ILIKE\s+\$(\d+)/i);
+    if (cityMatch) {
+      const cIdx = parseInt(cityMatch[1], 10) - 1;
+      const cVal = (params[cIdx] as string)?.replace(/%/g, '').trim().toLowerCase();
+      if (cVal) {
+        list = list.filter(p => p.city && p.city.toLowerCase().includes(cVal));
+      }
+    }
+
+    // Specific locality filter (p.locality ILIKE $x)
+    const locMatch = normalized.match(/p\.locality\s+ILIKE\s+\$(\d+)/i);
+    if (locMatch) {
+      const lIdx = parseInt(locMatch[1], 10) - 1;
+      const lVal = (params[lIdx] as string)?.replace(/%/g, '').trim().toLowerCase();
+      if (lVal) {
+        list = list.filter(p => p.locality && p.locality.toLowerCase().includes(lVal));
       }
     }
 
     if (normalized.includes("p.handling_mode = 'DIRECT'")) {
       list = list.filter(p => p.handling_mode === 'DIRECT');
+    }
+
+    // Numeric filters
+    const minPriceMatch = normalized.match(/p\.asking_price\s*>=\s*\$(\d+)/i);
+    if (minPriceMatch) {
+      const minP = Number(params[parseInt(minPriceMatch[1], 10) - 1]);
+      if (!isNaN(minP)) list = list.filter(p => p.asking_price >= minP);
+    }
+    const maxPriceMatch = normalized.match(/p\.asking_price\s*<=\s*\$(\d+)/i);
+    if (maxPriceMatch) {
+      const maxP = Number(params[parseInt(maxPriceMatch[1], 10) - 1]);
+      if (!isNaN(maxP)) list = list.filter(p => p.asking_price <= maxP);
+    }
+    const bedMatch = normalized.match(/p\.bedrooms\s*>=\s*\$(\d+)/i);
+    if (bedMatch) {
+      const beds = Number(params[parseInt(bedMatch[1], 10) - 1]);
+      if (!isNaN(beds)) list = list.filter(p => p.bedrooms !== null && p.bedrooms >= beds);
+    }
+    const bathMatch = normalized.match(/p\.bathrooms\s*>=\s*\$(\d+)/i);
+    if (bathMatch) {
+      const baths = Number(params[parseInt(bathMatch[1], 10) - 1]);
+      if (!isNaN(baths)) list = list.filter(p => p.bathrooms !== null && p.bathrooms >= baths);
+    }
+    const minAreaMatch = normalized.match(/p\.area_sqft\s*>=\s*\$(\d+)/i);
+    if (minAreaMatch) {
+      const minA = Number(params[parseInt(minAreaMatch[1], 10) - 1]);
+      if (!isNaN(minA)) list = list.filter(p => p.area_sqft !== null && p.area_sqft >= minA);
+    }
+    const maxAreaMatch = normalized.match(/p\.area_sqft\s*<=\s*\$(\d+)/i);
+    if (maxAreaMatch) {
+      const maxA = Number(params[parseInt(maxAreaMatch[1], 10) - 1]);
+      if (!isNaN(maxA)) list = list.filter(p => p.area_sqft !== null && p.area_sqft <= maxA);
+    }
+
+    // Geographic Bounding Box filtering (ST_Within & ST_MakeEnvelope)
+    if (normalized.toUpperCase().includes('ST_WITHIN') && normalized.toUpperCase().includes('ST_MAKEENVELOPE')) {
+      const west = Number(params[0]);
+      const south = Number(params[1]);
+      const east = Number(params[2]);
+      const north = Number(params[3]);
+      const minLng = Math.min(west, east);
+      const maxLng = Math.max(west, east);
+      const minLat = Math.min(south, north);
+      const maxLat = Math.max(south, north);
+      list = list.filter(p =>
+        p.longitude !== null &&
+        p.latitude !== null &&
+        p.longitude >= minLng &&
+        p.longitude <= maxLng &&
+        p.latitude >= minLat &&
+        p.latitude <= maxLat
+      );
+    }
+
+    // Geographic Radius filtering (ST_DWithin & ST_MakePoint)
+    let centerLat: number | null = null;
+    let centerLng: number | null = null;
+    if (normalized.toUpperCase().includes('ST_DWITHIN') && normalized.toUpperCase().includes('ST_MAKEPOINT')) {
+      centerLng = Number(params[0]);
+      centerLat = Number(params[1]);
+      const radiusMeters = Number(params[2]);
+
+      const deg2rad = (deg: number) => deg * (Math.PI / 180);
+      const getDist = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371000;
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      };
+
+      list = list.filter(p => {
+        if (p.latitude === null || p.longitude === null) return false;
+        const d = getDist(centerLat!, centerLng!, p.latitude, p.longitude);
+        return d <= radiusMeters;
+      });
     }
 
     // Check if COUNT query
@@ -165,7 +290,24 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     }
 
     // Sort
-    if (normalized.includes('p.asking_price ASC')) {
+    if (normalized.includes('distance ASC') && centerLat !== null && centerLng !== null) {
+      const deg2rad = (deg: number) => deg * (Math.PI / 180);
+      const getDist = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371000;
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      };
+      list.sort((a, b) => {
+        const da = (a.latitude && a.longitude) ? getDist(centerLat!, centerLng!, a.latitude, a.longitude) : 999999999;
+        const db = (b.latitude && b.longitude) ? getDist(centerLat!, centerLng!, b.latitude, b.longitude) : 999999999;
+        return da - db;
+      });
+    } else if (normalized.includes('p.asking_price ASC')) {
       list.sort((a, b) => a.asking_price - b.asking_price);
     } else if (normalized.includes('p.asking_price DESC')) {
       list.sort((a, b) => b.asking_price - a.asking_price);
@@ -176,11 +318,24 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     // Limit and Offset
     const limit = Number(params[params.length - 2]) || 20;
     const offset = Number(params[params.length - 1]) || 0;
-    const page = list.slice(offset, offset + limit).map(p => ({
-      ...p,
-      cover_image_url: memoryDb.getCoverImageUrl(p.id),
-      distance: 1200,
-    }));
+    const page = list.slice(offset, offset + limit).map(p => {
+      let dist: number | null = null;
+      if (centerLat !== null && centerLng !== null && p.latitude !== null && p.longitude !== null) {
+        const deg2rad = (deg: number) => deg * (Math.PI / 180);
+        const dLat = deg2rad(p.latitude - centerLat);
+        const dLon = deg2rad(p.longitude - centerLng);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(deg2rad(centerLat)) * Math.cos(deg2rad(p.latitude)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        dist = Math.round(6371000 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+      }
+      return {
+        ...p,
+        cover_image_url: memoryDb.getCoverImageUrl(p.id),
+        distance: dist ?? 1200,
+      };
+    });
 
     return { rows: page, rowCount: page.length };
   }
@@ -198,22 +353,22 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       type: params[5] as string,
       purpose: params[6] as string,
       asking_price: Number(params[7]),
-      security_deposit: params[8] ? Number(params[8]) : null,
-      area_sqft: params[9] ? Number(params[9]) : null,
-      carpet_area_sqft: params[10] ? Number(params[10]) : null,
-      bedrooms: params[11] !== undefined ? Number(params[11]) : null,
-      bathrooms: params[12] !== undefined ? Number(params[12]) : null,
-      floor_level: params[13] !== undefined ? Number(params[13]) : null,
-      total_floors: params[14] !== undefined ? Number(params[14]) : null,
+      security_deposit: params[8] != null ? Number(params[8]) : null,
+      area_sqft: params[9] != null ? Number(params[9]) : null,
+      carpet_area_sqft: params[10] != null ? Number(params[10]) : null,
+      bedrooms: params[11] != null ? Number(params[11]) : null,
+      bathrooms: params[12] != null ? Number(params[12]) : null,
+      floor_level: params[13] != null ? Number(params[13]) : null,
+      total_floors: params[14] != null ? Number(params[14]) : null,
       furnishing: (params[15] as string) || null,
-      parking: params[16] !== undefined ? Number(params[16]) : 0,
+      parking: params[16] != null ? Number(params[16]) : 0,
       amenities: (params[17] as string[]) || [],
       street_address: (params[18] as string) || null,
       city: (params[19] as string) || null,
       locality: (params[20] as string) || null,
       postal_code: (params[21] as string) || null,
-      longitude: Number(params[22]) || 72.8777,
-      latitude: Number(params[23]) || 19.076,
+      longitude: params[22] != null ? Number(params[22]) : 77.5946,
+      latitude: params[23] != null ? Number(params[23]) : 12.9716,
       status: 'DRAFT',
       view_count: 0,
       created_at: new Date(),
@@ -221,6 +376,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       published_at: null,
     };
     memoryDb.properties.push(prop);
+    memoryDb.saveToDisk();
     return { rows: [prop], rowCount: 1 };
   }
 
@@ -241,13 +397,35 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       prop.status = params[0] as string;
       if (prop.status === 'ACTIVE' && !prop.published_at) prop.published_at = new Date();
       prop.updated_at = new Date();
+      memoryDb.saveToDisk();
       return { rows: [prop], rowCount: 1 };
     }
 
-    // General update
-    if (normalized.includes('broker_id =')) prop.broker_id = params[0] as string;
-    if (normalized.includes('handling_mode =')) prop.handling_mode = params[1] as string;
+    // Dynamic property update for any modified fields
+    const setMatch = normalized.match(/UPDATE properties SET (.*) WHERE/i);
+    if (setMatch) {
+      const setClauses = setMatch[1].split(',').map(s => s.trim());
+      setClauses.forEach((clause) => {
+        const colMatch = clause.match(/^([a-z_]+)\s*=\s*\$(\d+)/i);
+        if (colMatch) {
+          const col = colMatch[1];
+          const paramIdx = parseInt(colMatch[2], 10) - 1;
+          const val = params[paramIdx];
+          (prop as any)[col] = val;
+        }
+      });
+    }
+
+    const locMatch = normalized.match(/location = ST_SetSRID\(ST_MakePoint\(\$(\d+),\s*\$(\d+)\)/i);
+    if (locMatch) {
+      const lngIdx = parseInt(locMatch[1], 10) - 1;
+      const latIdx = parseInt(locMatch[2], 10) - 1;
+      prop.longitude = Number(params[lngIdx]);
+      prop.latitude = Number(params[latIdx]);
+    }
+
     prop.updated_at = new Date();
+    memoryDb.saveToDisk();
     return { rows: [prop], rowCount: 1 };
   }
 
@@ -256,11 +434,27 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     const id = params[0] as string;
     memoryDb.properties = memoryDb.properties.filter(p => p.id !== id);
     memoryDb.media = memoryDb.media.filter(m => m.property_id !== id);
+    memoryDb.saveToDisk();
     return { rows: [{ id }], rowCount: 1 };
   }
 
-  // 4. PROPERTY MEDIA
-  if (normalized.includes('FROM property_media')) {
+  // 4. PROPERTY STATUS HISTORY
+  if (normalized.startsWith('INSERT INTO property_status_history')) {
+    const rec = {
+      id: uuidv4(),
+      property_id: params[0] as string,
+      from_status: (params[1] as string) || null,
+      to_status: params[2] as string,
+      changed_by: params[3] as string,
+      changed_at: new Date(),
+    };
+    memoryDb.statusHistory.push(rec);
+    memoryDb.saveToDisk();
+    return { rows: [rec], rowCount: 1 };
+  }
+
+  // 5. PROPERTY MEDIA
+  if (normalized.startsWith('SELECT') && normalized.includes('FROM property_media') && !normalized.includes('FROM inquiries') && !normalized.includes('FROM wishlists') && !normalized.includes('FROM properties')) {
     if (normalized.includes('COUNT(*)')) {
       const propId = params[0] as string;
       const count = memoryDb.media.filter(m => m.property_id === propId).length;
@@ -291,6 +485,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.media.push(record);
+    memoryDb.saveToDisk();
     return { rows: [record], rowCount: 1 };
   }
 
@@ -299,30 +494,96 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     memoryDb.media.forEach(m => {
       if (m.property_id === propId) m.is_cover = false;
     });
+    memoryDb.saveToDisk();
     return { rows: [], rowCount: 1 };
+  }
+
+  if (normalized.includes('UPDATE property_media SET sort_order = $1')) {
+    const sortOrder = Number(params[0]);
+    const isCover = Boolean(params[1]);
+    const id = params[2] as string;
+    const propId = params[3] as string;
+    const item = memoryDb.media.find(m => m.id === id && m.property_id === propId);
+    if (item) {
+      item.sort_order = sortOrder;
+      item.is_cover = isCover;
+    }
+    memoryDb.saveToDisk();
+    return { rows: item ? [item] : [], rowCount: item ? 1 : 0 };
   }
 
   if (normalized.startsWith('DELETE FROM property_media WHERE id = $1')) {
     const id = params[0] as string;
     const removed = memoryDb.media.find(m => m.id === id);
     memoryDb.media = memoryDb.media.filter(m => m.id !== id);
+    if (removed && removed.is_cover) {
+      const remaining = memoryDb.media.filter(m => m.property_id === removed.property_id);
+      if (remaining.length > 0) remaining[0].is_cover = true;
+    }
+    memoryDb.saveToDisk();
     return { rows: removed ? [removed] : [], rowCount: removed ? 1 : 0 };
   }
 
-  // 5. INQUIRIES
-  if (normalized.includes('FROM inquiries')) {
-    if (normalized.includes('COUNT(*)')) {
-      const count = memoryDb.inquiries.length;
-      return { rows: [{ count: count.toString() }], rowCount: 1 };
-    }
-    if (normalized.includes('WHERE id = $1')) {
+  // 6. INQUIRIES
+  if (normalized.includes('FROM inquiries') || normalized.includes('JOIN inquiries')) {
+    if (normalized.includes('WHERE id = $1') || normalized.includes('WHERE i.id = $1')) {
       const inq = memoryDb.inquiries.find(i => i.id === params[0]);
       return { rows: inq ? [inq] : [], rowCount: inq ? 1 : 0 };
     }
-    // Buyer inquiries or Handler leads
-    const list = memoryDb.inquiries.map(i => {
+
+    if (normalized.includes('COUNT(*)') && normalized.includes('read = false')) {
+      const handlerId = params[0] as string;
+      const count = memoryDb.inquiries.filter(i => i.handler_id === handlerId && !i.read).length;
+      return { rows: [{ count: count.toString() }], rowCount: 1 };
+    }
+
+    let list = [...memoryDb.inquiries];
+    if (normalized.includes('buyer_id = $1') || normalized.includes('i.buyer_id = $1')) {
+      const buyerId = params[0] as string;
+      list = list.filter(i => i.buyer_id === buyerId);
+    } else if (normalized.includes('handler_id = $1') || normalized.includes('i.handler_id = $1')) {
+      const handlerId = params[0] as string;
+      list = list.filter(i => i.handler_id === handlerId);
+    } else if (normalized.includes('owner_id = $1') || normalized.includes('p.owner_id = $1')) {
+      const ownerId = params[0] as string;
+      const ownerPropIds = memoryDb.properties.filter(p => p.owner_id === ownerId).map(p => p.id);
+      list = list.filter(i => ownerPropIds.includes(i.property_id));
+    }
+
+    // Property ID filter on leads
+    const propIdMatch = normalized.match(/i\.property_id\s*=\s*\$(\d+)/i);
+    if (propIdMatch) {
+      const pIdx = parseInt(propIdMatch[1], 10) - 1;
+      const pVal = params[pIdx] as string;
+      if (pVal) list = list.filter(i => i.property_id === pVal);
+    }
+
+    // Filter by stage if present
+    for (const val of params) {
+      if (typeof val === 'string' && ['NEW', 'SITE_VISIT_SCHEDULED', 'NEGOTIATION', 'CLOSED', 'DROPPED'].includes(val)) {
+        list = list.filter(i => i.stage === val);
+      }
+    }
+
+    if (normalized.includes('COUNT(*)')) {
+      return { rows: [{ count: list.length.toString() }], rowCount: 1 };
+    }
+
+    list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    let limit = 20;
+    let offset = 0;
+    if (params.length >= 2 && typeof params[params.length - 2] === 'number') {
+      limit = params[params.length - 2] as number;
+      offset = (params[params.length - 1] as number) || 0;
+    } else if (params.length >= 1 && typeof params[params.length - 1] === 'number') {
+      limit = params[params.length - 1] as number;
+    }
+
+    const page = list.slice(offset, offset + limit).map(i => {
       const prop = memoryDb.properties.find(p => p.id === i.property_id);
       const buyer = memoryDb.users.find(u => u.id === i.buyer_id);
+      const handler = memoryDb.users.find(u => u.id === i.handler_id);
       return {
         ...i,
         property_title: prop?.title || 'Property',
@@ -334,9 +595,13 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
         buyer_name: buyer?.full_name || 'Buyer',
         buyer_phone: buyer?.phone || '',
         buyer_email: buyer?.email || '',
+        handler_name: handler?.full_name || 'Host',
+        notes_count: memoryDb.inquiryNotes.filter(n => n.inquiry_id === i.id).length,
+        visits_count: memoryDb.visits.filter(v => v.inquiry_id === i.id).length,
       };
     });
-    return { rows: list, rowCount: list.length };
+
+    return { rows: page, rowCount: page.length };
   }
 
   if (normalized.startsWith('INSERT INTO inquiries')) {
@@ -354,6 +619,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       updated_at: new Date(),
     };
     memoryDb.inquiries.push(inq);
+    memoryDb.saveToDisk();
     return { rows: [inq], rowCount: 1 };
   }
 
@@ -363,10 +629,21 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       inq.stage = params[0] as string;
       inq.updated_at = new Date();
     }
+    memoryDb.saveToDisk();
     return { rows: inq ? [inq] : [], rowCount: inq ? 1 : 0 };
   }
 
-  // 6. INQUIRY NOTES & ACTIVITIES
+  if (normalized.startsWith('UPDATE inquiries SET read = true WHERE id = $1')) {
+    const inq = memoryDb.inquiries.find(i => i.id === params[0]);
+    if (inq) {
+      inq.read = true;
+      inq.updated_at = new Date();
+    }
+    memoryDb.saveToDisk();
+    return { rows: inq ? [inq] : [], rowCount: inq ? 1 : 0 };
+  }
+
+  // 7. INQUIRY NOTES & ACTIVITIES
   if (normalized.includes('FROM inquiry_notes')) {
     const inqId = params[0] as string;
     const notes = memoryDb.inquiryNotes.filter(n => n.inquiry_id === inqId).map(n => {
@@ -385,6 +662,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.inquiryNotes.push(record);
+    memoryDb.saveToDisk();
     return { rows: [record], rowCount: 1 };
   }
 
@@ -407,11 +685,13 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.inquiryActivities.push(record);
+    memoryDb.saveToDisk();
     return { rows: [record], rowCount: 1 };
   }
 
-  // 7. SITE VISITS
+  // 8. SITE VISITS
   if (normalized.includes('FROM site_visits')) {
+    // Conflict check
     if (normalized.includes('WHERE handler_id = $1 AND scheduled_at = $2')) {
       const handlerId = params[0] as string;
       const scheduledAt = new Date(params[1] as string).getTime();
@@ -422,14 +702,61 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       );
       return { rows: conflict.map(c => ({ id: c.id })), rowCount: conflict.length };
     }
+
+    // Availability slots query: DATE(scheduled_at) = $2
+    if (normalized.includes('DATE(scheduled_at) = $2') || normalized.includes('DATE(scheduled_at) = $1')) {
+      const handlerId = params[0] as string;
+      const targetDate = params[1] as string;
+      const dateVisits = memoryDb.visits.filter(v => {
+        const dStr = new Date(v.scheduled_at).toISOString().split('T')[0];
+        return v.handler_id === handlerId && dStr === targetDate && ['PROPOSED', 'CONFIRMED'].includes(v.status);
+      });
+      return { rows: dateVisits, rowCount: dateVisits.length };
+    }
+
+    let list = [...memoryDb.visits];
+    if (normalized.includes('buyer_id = $1') || normalized.includes('v.buyer_id = $1')) {
+      const buyerId = params[0] as string;
+      list = list.filter(v => v.buyer_id === buyerId);
+    } else if (normalized.includes('handler_id = $1') || normalized.includes('v.handler_id = $1')) {
+      const handlerId = params[0] as string;
+      list = list.filter(v => v.handler_id === handlerId);
+    }
+
     if (normalized.includes('COUNT(*)')) {
-      return { rows: [{ count: memoryDb.visits.length.toString() }], rowCount: 1 };
+      return { rows: [{ count: list.length.toString() }], rowCount: 1 };
     }
-    if (normalized.includes('WHERE id = $1')) {
+
+    if (normalized.includes('WHERE id = $1') || normalized.includes('WHERE v.id = $1')) {
       const v = memoryDb.visits.find(item => item.id === params[0]);
-      return { rows: v ? [v] : [], rowCount: v ? 1 : 0 };
+      if (!v) return { rows: [], rowCount: 0 };
+      const prop = memoryDb.properties.find(p => p.id === v.property_id);
+      const buyer = memoryDb.users.find(u => u.id === v.buyer_id);
+      const handler = memoryDb.users.find(u => u.id === v.handler_id);
+      return {
+        rows: [{
+          ...v,
+          property_title: prop?.title || 'Property',
+          city: prop?.city,
+          locality: prop?.locality,
+          buyer_name: buyer?.full_name || 'Buyer',
+          buyer_phone: buyer?.phone || '',
+          handler_name: handler?.full_name || 'Host',
+        }],
+        rowCount: 1,
+      };
     }
-    const list = memoryDb.visits.map(v => {
+
+    list.sort((a, b) => new Date(b.scheduled_at).getTime() - new Date(a.scheduled_at).getTime());
+
+    let limit = 20;
+    let offset = 0;
+    if (params.length >= 2 && typeof params[params.length - 2] === 'number') {
+      limit = params[params.length - 2] as number;
+      offset = (params[params.length - 1] as number) || 0;
+    }
+
+    const page = list.slice(offset, offset + limit).map(v => {
       const prop = memoryDb.properties.find(p => p.id === v.property_id);
       const buyer = memoryDb.users.find(u => u.id === v.buyer_id);
       const handler = memoryDb.users.find(u => u.id === v.handler_id);
@@ -445,7 +772,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
         handler_phone: handler?.phone || '',
       };
     });
-    return { rows: list, rowCount: list.length };
+    return { rows: page, rowCount: page.length };
   }
 
   if (normalized.startsWith('INSERT INTO site_visits')) {
@@ -464,6 +791,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       updated_at: new Date(),
     };
     memoryDb.visits.push(visit);
+    memoryDb.saveToDisk();
     return { rows: [visit], rowCount: 1 };
   }
 
@@ -471,19 +799,26 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     const id = params[params.length - 1] as string;
     const v = memoryDb.visits.find(item => item.id === id);
     if (v) {
-      if (normalized.includes('status = $1')) v.status = params[0] as string;
+      if (normalized.includes('scheduled_at = $1') && normalized.includes('status = $2')) {
+        v.scheduled_at = new Date(params[0] as string);
+        v.status = params[1] as string;
+      } else if (normalized.includes('status = $1')) {
+        v.status = params[0] as string;
+      }
       v.updated_at = new Date();
+      memoryDb.saveToDisk();
     }
     return { rows: v ? [v] : [], rowCount: v ? 1 : 0 };
   }
 
-  // 8. WISHLISTS
+  // 9. WISHLISTS
   if (normalized.startsWith('INSERT INTO wishlists')) {
     const userId = params[0] as string;
     const propId = params[1] as string;
     const exists = memoryDb.wishlists.some(w => w.user_id === userId && w.property_id === propId);
     if (!exists) {
       memoryDb.wishlists.push({ id: uuidv4(), user_id: userId, property_id: propId, created_at: new Date() });
+      memoryDb.saveToDisk();
     }
     return { rows: [], rowCount: 1 };
   }
@@ -493,29 +828,54 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     const propId = params[1] as string;
     const initial = memoryDb.wishlists.length;
     memoryDb.wishlists = memoryDb.wishlists.filter(w => !(w.user_id === userId && w.property_id === propId));
+    memoryDb.saveToDisk();
     return { rows: initial > memoryDb.wishlists.length ? [{ id: 'deleted' }] : [], rowCount: 1 };
   }
 
-  if (normalized.includes('FROM wishlists')) {
+  if (normalized.includes('FROM wishlists') || normalized.includes('JOIN wishlists')) {
     const userId = params[0] as string;
+
+    // Compare properties query
+    if (normalized.includes('WHERE p.id IN') || normalized.includes('JOIN wishlists w ON w.property_id = p.id AND w.user_id = $1')) {
+      const compareIds = params.slice(1) as string[];
+      const list = memoryDb.properties
+        .filter(p => compareIds.includes(p.id))
+        .map(p => {
+          const owner = memoryDb.users.find(u => u.id === p.owner_id);
+          return {
+            ...p,
+            owner_name: owner?.full_name || 'Verified Owner',
+            cover_image_url: memoryDb.getCoverImageUrl(p.id),
+          };
+        });
+      return { rows: list, rowCount: list.length };
+    }
+
     if (normalized.includes('COUNT(*)')) {
       const count = memoryDb.wishlists.filter(w => w.user_id === userId).length;
       return { rows: [{ count: count.toString() }], rowCount: 1 };
     }
-    if (normalized.includes('WHERE user_id = $1 AND property_id = $2')) {
+    if (normalized.includes('WHERE user_id = $1 AND property_id = $2') || normalized.includes('SELECT 1 FROM wishlists')) {
       const propId = params[1] as string;
       const found = memoryDb.wishlists.some(w => w.user_id === userId && w.property_id === propId);
       return { rows: found ? [{ '1': 1 }] : [], rowCount: found ? 1 : 0 };
     }
     // List wishlisted properties
+    let limit = 20;
+    let offset = 0;
+    if (params.length >= 3 && typeof params[1] === 'number') {
+      limit = params[1];
+      offset = (params[2] as number) || 0;
+    }
     const propIds = memoryDb.wishlists.filter(w => w.user_id === userId).map(w => w.property_id);
     const list = memoryDb.properties
       .filter(p => propIds.includes(p.id))
+      .slice(offset, offset + limit)
       .map(p => ({ ...p, cover_image_url: memoryDb.getCoverImageUrl(p.id), isWishlisted: true }));
     return { rows: list, rowCount: list.length };
   }
 
-  // 9. NOTIFICATIONS
+  // 10. NOTIFICATIONS
   if (normalized.includes('FROM notifications')) {
     const userId = params[0] as string;
     if (normalized.includes('COUNT(*)') && normalized.includes('read = false')) {
@@ -526,7 +886,19 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       const count = memoryDb.notifications.filter(n => n.user_id === userId).length;
       return { rows: [{ count: count.toString() }], rowCount: 1 };
     }
-    const list = memoryDb.notifications.filter(n => n.user_id === userId);
+
+    let limit = 20;
+    let offset = 0;
+    if (params.length >= 3 && typeof params[1] === 'number') {
+      limit = params[1];
+      offset = (params[2] as number) || 0;
+    }
+
+    const list = memoryDb.notifications
+      .filter(n => n.user_id === userId)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      .slice(offset, offset + limit);
+
     return { rows: list, rowCount: list.length };
   }
 
@@ -542,18 +914,27 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.notifications.push(notif);
+    memoryDb.saveToDisk();
     return { rows: [notif], rowCount: 1 };
   }
 
   if (normalized.startsWith('UPDATE notifications SET read = true')) {
     const userId = params[0] as string;
-    memoryDb.notifications.forEach(n => {
-      if (n.user_id === userId) n.read = true;
-    });
+    if (normalized.includes('AND id IN')) {
+      const ids = params.slice(1) as string[];
+      memoryDb.notifications.forEach(n => {
+        if (n.user_id === userId && ids.includes(n.id)) n.read = true;
+      });
+    } else {
+      memoryDb.notifications.forEach(n => {
+        if (n.user_id === userId) n.read = true;
+      });
+    }
+    memoryDb.saveToDisk();
     return { rows: [], rowCount: 1 };
   }
 
-  // 10. LEASE RECORDS
+  // 11. LEASE RECORDS
   if (normalized.includes('FROM lease_records')) {
     if (normalized.includes('COUNT(*)')) {
       return { rows: [{ count: memoryDb.leaseRecords.length.toString() }], rowCount: 1 };
@@ -564,6 +945,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
         ...lr,
         property_title: prop?.title || 'Property',
         property_city: prop?.city,
+        property_type: prop?.type,
       };
     });
     return { rows: list, rowCount: list.length };
@@ -586,10 +968,34 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       updated_at: new Date(),
     };
     memoryDb.leaseRecords.push(lr);
+    memoryDb.saveToDisk();
     return { rows: [lr], rowCount: 1 };
   }
 
-  // 11. OTP CODES
+  if (normalized.startsWith('UPDATE lease_records SET')) {
+    const id = params[params.length - 1] as string;
+    const lr = memoryDb.leaseRecords.find(item => item.id === id);
+    if (!lr) return { rows: [], rowCount: 0 };
+
+    const setMatch = normalized.match(/UPDATE lease_records SET (.*) WHERE/i);
+    if (setMatch) {
+      const setClauses = setMatch[1].split(',').map(s => s.trim());
+      setClauses.forEach((clause) => {
+        const colMatch = clause.match(/^([a-z_]+)\s*=\s*\$(\d+)/i);
+        if (colMatch) {
+          const col = colMatch[1];
+          const paramIdx = parseInt(colMatch[2], 10) - 1;
+          const val = params[paramIdx];
+          (lr as any)[col] = val;
+        }
+      });
+    }
+    lr.updated_at = new Date();
+    memoryDb.saveToDisk();
+    return { rows: [lr], rowCount: 1 };
+  }
+
+  // 12. OTP CODES
   if (normalized.startsWith('INSERT INTO otp_codes')) {
     const otp = {
       id: uuidv4(),
@@ -601,6 +1007,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.otps.push(otp);
+    memoryDb.saveToDisk();
     return { rows: [otp], rowCount: 1 };
   }
 
@@ -617,11 +1024,12 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     if (otp) {
       if (normalized.includes('attempts = attempts + 1')) otp.attempts += 1;
       if (normalized.includes('consumed_at = NOW()')) otp.consumed_at = new Date();
+      memoryDb.saveToDisk();
     }
     return { rows: [], rowCount: 1 };
   }
 
-  // 12. SAVED SEARCHES
+  // 13. SAVED SEARCHES
   if (normalized.startsWith('INSERT INTO saved_searches')) {
     const ss = {
       id: uuidv4(),
@@ -635,6 +1043,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.savedSearches.push(ss);
+    memoryDb.saveToDisk();
     return { rows: [ss], rowCount: 1 };
   }
 
@@ -649,10 +1058,11 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     const userId = params[1] as string;
     const initial = memoryDb.savedSearches.length;
     memoryDb.savedSearches = memoryDb.savedSearches.filter(s => !(s.id === id && s.user_id === userId));
+    memoryDb.saveToDisk();
     return { rows: initial > memoryDb.savedSearches.length ? [{ id }] : [], rowCount: 1 };
   }
 
-  // 13. AVAILABILITY
+  // 14. AVAILABILITY
   if (normalized.includes('FROM availability_rules')) {
     const handlerId = params[0] as string;
     const list = memoryDb.availabilityRules.filter(r => r.handler_id === handlerId);
@@ -662,6 +1072,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
   if (normalized.startsWith('DELETE FROM availability_rules')) {
     const handlerId = params[0] as string;
     memoryDb.availabilityRules = memoryDb.availabilityRules.filter(r => r.handler_id !== handlerId);
+    memoryDb.saveToDisk();
     return { rows: [], rowCount: 1 };
   }
 
@@ -675,6 +1086,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       created_at: new Date(),
     };
     memoryDb.availabilityRules.push(r);
+    memoryDb.saveToDisk();
     return { rows: [r], rowCount: 1 };
   }
 
@@ -684,6 +1096,28 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
     return { rows: list, rowCount: list.length };
   }
 
-  // Default fallback for any unhandled queries
+  if (normalized.startsWith('INSERT INTO availability_blocks')) {
+    const b = {
+      id: uuidv4(),
+      handler_id: params[0] as string,
+      blocked_date: params[1] as string,
+      reason: (params[2] as string) || null,
+      created_at: new Date(),
+    };
+    memoryDb.availabilityBlocks.push(b);
+    memoryDb.saveToDisk();
+    return { rows: [b], rowCount: 1 };
+  }
+
+  if (normalized.startsWith('DELETE FROM availability_blocks')) {
+    const id = params[0] as string;
+    const handlerId = params[1] as string;
+    const initial = memoryDb.availabilityBlocks.length;
+    memoryDb.availabilityBlocks = memoryDb.availabilityBlocks.filter(b => !(b.id === id && b.handler_id === handlerId));
+    memoryDb.saveToDisk();
+    return { rows: initial > memoryDb.availabilityBlocks.length ? [{ id }] : [], rowCount: initial > memoryDb.availabilityBlocks.length ? 1 : 0 };
+  }
+
+  // Default fallback for unhandled queries
   return { rows: [], rowCount: 0 };
 }

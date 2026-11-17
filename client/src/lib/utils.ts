@@ -12,6 +12,12 @@ export function formatPrice(price: number): string {
   return `₹${price.toLocaleString('en-IN')}`;
 }
 
+export function formatPricePerSqft(price: number, sqft: number | null): string | null {
+  if (!sqft || sqft <= 0) return null;
+  const rate = Math.round(price / sqft);
+  return `₹${rate.toLocaleString('en-IN')}/sq.ft`;
+}
+
 export function formatDate(date: string): string {
   return new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
@@ -45,8 +51,11 @@ export function getLeadStageColor(stage: string): string {
 
 export function getPropertyTypeLabel(type: string): string {
   const labels: Record<string, string> = {
-    APARTMENT: 'Apartment', VILLA: 'Villa', INDEPENDENT_HOUSE: 'Independent House',
-    PLOT: 'Plot', COMMERCIAL: 'Commercial',
+    APARTMENT: 'Apartment',
+    VILLA: 'Villa',
+    INDEPENDENT_HOUSE: 'Independent House',
+    PLOT: 'Plot',
+    COMMERCIAL: 'Commercial',
   };
   return labels[type] || type;
 }

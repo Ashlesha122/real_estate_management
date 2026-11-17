@@ -6,6 +6,7 @@ const router = Router();
 
 router.get('/', authenticate, (req, res, next) => wishlistController.list(req, res, next));
 router.post('/', authenticate, (req, res, next) => wishlistController.add(req, res, next));
+router.post('/:propertyId', authenticate, (req, res, next) => wishlistController.add(req, res, next));
 router.delete('/:propertyId', authenticate, (req, res, next) => wishlistController.remove(req, res, next));
 router.get('/compare', authenticate, (req, res, next) => wishlistController.compare(req, res, next));
 

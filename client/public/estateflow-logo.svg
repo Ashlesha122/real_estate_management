@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="ef-primary-grad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="ef-accent-grad" x1="16" y1="12" x2="36" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="ef-shadow" x="0" y="0" width="48" height="48" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-opacity="0.15" />
+    </filter>
+  </defs>
+  <rect width="48" height="48" rx="12" fill="#0F172A" />
+  <!-- Dynamic Roof / Apex -->
+  <path d="M24 8L38 19V36C38 38.2091 36.2091 40 34 40H14C11.7909 40 10 38.2091 10 36V19L24 8Z" fill="url(#ef-primary-grad)" opacity="0.18" />
+  <!-- Architectural Flow Lines -->
+  <path d="M24 10L37 20.5V36C37 37.6569 35.6569 39 34 39H26V25H22V39H14C12.3431 39 11 37.6569 11 36V20.5L24 10Z" stroke="url(#ef-primary-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Modern Geometric Accent Flow -->
+  <path d="M19 23H29M19 18L24 14L29 18" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="34" cy="14" r="3" fill="#10B981" />
+</svg>

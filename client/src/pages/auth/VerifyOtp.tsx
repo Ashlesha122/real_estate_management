@@ -68,9 +68,18 @@ export default function VerifyOtp() {
         <p className="text-xs text-estate-500 mt-1 max-w-xs mx-auto">
           We have sent a verification code to <span className="font-semibold text-estate-700">{user?.phone || 'your phone'}</span>
         </p>
-        <p className="text-[11px] text-primary-600 font-mono mt-1">
-          (Development mode: Check server console for mock SMS OTP)
-        </p>
+        <div className="mt-2.5 p-2 bg-primary-50/80 rounded-xl border border-primary-100 flex items-center justify-center gap-1.5 text-xs text-primary-700">
+          <span>Dev code:</span>
+          <button
+            type="button"
+            onClick={() => setCode('123456')}
+            className="font-mono font-bold px-2 py-0.5 bg-primary-100 hover:bg-primary-200 rounded text-primary-800 transition-colors"
+            title="Click to auto-fill dev code 123456"
+          >
+            123456
+          </button>
+          <span className="text-[11px] text-estate-500">(or check server terminal)</span>
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>

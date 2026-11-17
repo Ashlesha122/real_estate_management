@@ -14,6 +14,21 @@ export default function Login() {
 
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
+  const handleQuickLogin = async (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('Password123!');
+    try {
+      setLoading(true);
+      await login(demoEmail, 'Password123!');
+      toast.success('Welcome back!');
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Invalid credentials');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -100,37 +115,39 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Demo Account Quick Buttons */}
-        <div className="mt-5 p-3.5 bg-estate-50 rounded-xl border border-estate-200 text-left space-y-2">
-          <span className="text-[11px] font-bold text-estate-500 uppercase tracking-wider block">
-            Quick Demo Login:
-          </span>
-          <div className="grid grid-cols-3 gap-1.5">
+        <div className="mt-6 pt-5 border-t border-estate-100">
+          <p className="text-[11px] font-semibold text-estate-500 uppercase tracking-wider text-center mb-2.5">
+            Quick Demo Sign-In
+          </p>
+          <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
-              onClick={() => { setEmail('buyer@estateflow.com'); setPassword('Password123!'); }}
-              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+              disabled={loading}
+              onClick={() => handleQuickLogin('owner@estateflow.com')}
+              className="px-2 py-2 text-xs font-medium rounded-lg border border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100 transition-colors text-center disabled:opacity-50"
             >
-              Buyer
+              🏢 Owner
             </button>
             <button
               type="button"
-              onClick={() => { setEmail('owner@estateflow.com'); setPassword('Password123!'); }}
-              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+              disabled={loading}
+              onClick={() => handleQuickLogin('buyer@estateflow.com')}
+              className="px-2 py-2 text-xs font-medium rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors text-center disabled:opacity-50"
             >
-              Owner
+              🏠 Buyer
             </button>
             <button
               type="button"
-              onClick={() => { setEmail('broker@estateflow.com'); setPassword('Password123!'); }}
-              className="py-1.5 px-2 bg-white hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 border border-estate-200 rounded-lg text-xs font-semibold text-estate-700 transition-colors text-center"
+              disabled={loading}
+              onClick={() => handleQuickLogin('broker@estateflow.com')}
+              className="px-2 py-2 text-xs font-medium rounded-lg border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors text-center disabled:opacity-50"
             >
-              Broker
+              🤝 Broker
             </button>
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-estate-100 text-center">
+        <div className="mt-5 pt-4 border-t border-estate-100 text-center">
           <p className="text-xs text-estate-600">
             Don't have an account yet?{' '}
             <Link to="/register" className="font-semibold text-primary-600 hover:text-primary-700">

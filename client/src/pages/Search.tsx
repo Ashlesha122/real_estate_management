@@ -7,19 +7,32 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
-  SlidersHorizontal,
   Loader2,
   Building2,
-  Scale
+  Scale,
+  Search as SearchIcon,
+  MapPin,
+  Crosshair,
+  RotateCcw
 } from 'lucide-react';
 import { PropertySummary } from '../types';
 import PropertyCard from '../components/property/PropertyCard';
-import PropertyMap from '../components/property/PropertyMap';
+import PropertyMap, { METRO_HUBS } from '../components/property/PropertyMap';
 import PropertyFilters, { FilterState } from '../components/property/PropertyFilters';
 import CompareModal from '../components/modals/CompareModal';
 import api from '../api/client';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
+
+const CITY_COORDS: Record<string, [number, number]> = {
+  'Bengaluru': [77.5946, 12.9716],
+  'Bangalore': [77.5946, 12.9716],
+  'Mumbai': [72.8477, 19.0760],
+  'Delhi NCR': [77.0984, 28.4682],
+  'Delhi': [77.0984, 28.4682],
+  'Hyderabad': [78.3752, 17.4399],
+  'Chennai': [80.2435, 13.0163],
+};
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -33,6 +46,11 @@ export default function Search() {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  // Map position state - only moves on user action
+  const [mapCenter, setMapCenter] = useState<[number, number]>([77.5946, 12.9716]); // Bengaluru default
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationInput, setLocationInput] = useState(searchParams.get('city') || '');
 
   // Compare state
   const [compareList, setCompareList] = useState<PropertySummary[]>([]);
@@ -48,7 +66,7 @@ export default function Search() {
     bathrooms: searchParams.get('bathrooms') || '',
     furnishing: searchParams.get('furnishing') || '',
     zeroBrokerage: searchParams.get('zeroBrokerage') === 'true',
-    amenities: searchParams.get('amenities') ? searchParams.get('amenities')!.split(',') : [],
+    amenities: searchParams.get('amenities') ? searchParams.get('amenities')!.split(',').filter(Boolean) : [],
     city: searchParams.get('city') || '',
     sort: searchParams.get('sort') || 'newest',
   });
@@ -68,7 +86,17 @@ export default function Search() {
       if (filters.zeroBrokerage) params.set('zeroBrokerage', 'true');
       if (filters.city) params.set('city', filters.city);
       if (filters.amenities.length > 0) params.set('amenities', filters.amenities.join(','));
-      params.set('sort', filters.sort || 'newest');
+
+      // GPS location filter
+      if (userLocation) {
+        params.set('lat', userLocation.lat.toString());
+        params.set('lng', userLocation.lng.toString());
+        params.set('radius', '35'); // 35 km radius
+        params.set('sort', 'distance');
+      } else {
+        params.set('sort', filters.sort || 'newest');
+      }
+
       params.set('page', page.toString());
       params.set('limit', '18');
 
@@ -81,25 +109,38 @@ export default function Search() {
     } finally {
       setLoading(false);
     }
-  }, [filters, page]);
+  }, [filters, page, userLocation]);
 
   useEffect(() => {
     fetchProperties();
   }, [fetchProperties]);
 
+  // Sync city to map center when city changes
+  useEffect(() => {
+    if (filters.city && CITY_COORDS[filters.city]) {
+      setMapCenter(CITY_COORDS[filters.city]);
+    }
+  }, [filters.city]);
+
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters);
     setPage(1);
 
-    // Update URL query params
+    // Update URL query params with ALL filters preserved
     const params = new URLSearchParams();
     if (newFilters.purpose) params.set('purpose', newFilters.purpose);
     if (newFilters.type) params.set('type', newFilters.type);
     if (newFilters.minPrice) params.set('minPrice', newFilters.minPrice);
     if (newFilters.maxPrice) params.set('maxPrice', newFilters.maxPrice);
     if (newFilters.bedrooms) params.set('bedrooms', newFilters.bedrooms);
+    if (newFilters.bathrooms) params.set('bathrooms', newFilters.bathrooms);
+    if (newFilters.furnishing) params.set('furnishing', newFilters.furnishing);
     if (newFilters.zeroBrokerage) params.set('zeroBrokerage', 'true');
     if (newFilters.city) params.set('city', newFilters.city);
+    if (newFilters.amenities && newFilters.amenities.length > 0) {
+      params.set('amenities', newFilters.amenities.join(','));
+    }
+    if (newFilters.sort) params.set('sort', newFilters.sort);
     setSearchParams(params);
   };
 
@@ -118,20 +159,54 @@ export default function Search() {
       sort: 'newest',
     };
     setFilters(empty);
+    setUserLocation(null);
+    setLocationInput('');
     setSearchParams({});
     setPage(1);
   };
 
+  const handleCitySelect = (cityName: string) => {
+    setLocationInput(cityName);
+    setUserLocation(null);
+    if (CITY_COORDS[cityName]) {
+      setMapCenter(CITY_COORDS[cityName]);
+    }
+    handleFilterChange({ ...filters, city: cityName });
+  };
+
+  const handleLocationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = locationInput.trim();
+    setUserLocation(null);
+    if (clean && CITY_COORDS[clean]) {
+      setMapCenter(CITY_COORDS[clean]);
+    }
+    handleFilterChange({ ...filters, city: clean });
+  };
+
+  const handleLocateMe = (coords: { lat: number; lng: number }) => {
+    setUserLocation(coords);
+    setMapCenter([coords.lng, coords.lat]);
+    setLocationInput('My Current Location');
+    toast.success('Showing properties nearest to your location!');
+  };
+
   const handleBboxChange = async (bbox: { north: number; south: number; east: number; west: number }) => {
     try {
+      setLoading(true);
       const params = new URLSearchParams({
         north: bbox.north.toString(),
         south: bbox.south.toString(),
         east: bbox.east.toString(),
         west: bbox.west.toString(),
       });
+      // Preserve active filters during map area search
       if (filters.purpose) params.set('purpose', filters.purpose);
       if (filters.type) params.set('type', filters.type);
+      if (filters.minPrice) params.set('minPrice', filters.minPrice);
+      if (filters.maxPrice) params.set('maxPrice', filters.maxPrice);
+      if (filters.bedrooms) params.set('bedrooms', filters.bedrooms);
+      if (filters.bathrooms) params.set('bathrooms', filters.bathrooms);
       if (filters.zeroBrokerage) params.set('zeroBrokerage', 'true');
 
       const res = await api.get(`/search/bbox?${params.toString()}`);
@@ -141,6 +216,8 @@ export default function Search() {
       }
     } catch (err) {
       console.error('BBox search error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,11 +253,105 @@ export default function Search() {
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Top Location Search & Quick Hubs Bar */}
+      <div className="mb-6 bg-white rounded-2xl p-4 border border-estate-200 shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          {/* Location Input Form */}
+          <form onSubmit={handleLocationSubmit} className="flex-1 flex items-center gap-2">
+            <div className="relative flex-1">
+              <MapPin className="w-4 h-4 text-primary-600 absolute left-3.5 top-3.5" />
+              <input
+                type="text"
+                value={locationInput}
+                onChange={(e) => setLocationInput(e.target.value)}
+                placeholder="Enter city or locality (e.g. Mumbai, Bengaluru, Indiranagar, Whitefield)"
+                className="input-field pl-10 pr-4 text-sm w-full py-2.5"
+              />
+              {locationInput && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLocationInput('');
+                    handleFilterChange({ ...filters, city: '' });
+                  }}
+                  className="absolute right-3 top-3 text-xs text-estate-400 hover:text-estate-700"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="btn-primary py-2.5 px-4 text-xs flex items-center gap-1.5 flex-shrink-0"
+            >
+              <SearchIcon className="w-3.5 h-3.5" />
+              <span>Search City</span>
+            </button>
+          </form>
+
+          {/* Quick GPS Near Me Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (!navigator.geolocation) {
+                toast.error('Geolocation is not supported by your browser');
+                return;
+              }
+              toast.info('Retrieving GPS coordinates...');
+              navigator.geolocation.getCurrentPosition(
+                (pos) => handleLocateMe({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+                (err) => toast.error('Could not get GPS location: ' + err.message),
+                { timeout: 8000, enableHighAccuracy: true }
+              );
+            }}
+            className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all flex-shrink-0 ${
+              userLocation
+                ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+            }`}
+          >
+            <Crosshair className="w-4 h-4" />
+            <span>{userLocation ? '📍 Showing Nearby (GPS)' : '📍 Find Near Me'}</span>
+          </button>
+        </div>
+
+        {/* Quick Metro City Selector Pills */}
+        <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-estate-100 overflow-x-auto text-xs">
+          <span className="font-semibold text-estate-500 whitespace-nowrap mr-1">Metro Hubs:</span>
+          <button
+            type="button"
+            onClick={() => handleCitySelect('')}
+            className={`px-3 py-1 rounded-full font-medium transition-all whitespace-nowrap ${
+              !filters.city && !userLocation
+                ? 'bg-estate-900 text-white font-bold'
+                : 'bg-estate-100 hover:bg-estate-200 text-estate-700'
+            }`}
+          >
+            All Cities
+          </button>
+          {METRO_HUBS.map((m) => (
+            <button
+              key={m.name}
+              type="button"
+              onClick={() => handleCitySelect(m.name)}
+              className={`px-3 py-1 rounded-full font-medium transition-all whitespace-nowrap ${
+                filters.city?.toLowerCase() === m.name.toLowerCase()
+                  ? 'bg-primary-600 text-white font-bold shadow-sm'
+                  : 'bg-estate-100 hover:bg-estate-200 text-estate-700'
+              }`}
+            >
+              {m.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Search Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-estate-200">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold font-display text-estate-900">
-            {filters.city ? `Properties in ${filters.city}` : 'Explore Properties'}
+            {userLocation ? 'Properties Near Your Location' : filters.city ? `Properties in ${filters.city}` : 'Explore Properties'}
           </h1>
           <p className="text-xs text-estate-500 mt-0.5">
             Showing {totalCount} verified listings {filters.zeroBrokerage && '• 0% Brokerage'}
@@ -258,139 +429,181 @@ export default function Search() {
         </div>
 
         {/* Content Area */}
-        <div className={viewMode === 'split' ? 'lg:col-span-9' : 'lg:col-span-9'}>
-          {viewMode === 'split' ? (
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 h-[calc(100vh-180px)] min-h-[600px]">
-              {/* Properties column */}
-              <div className="xl:col-span-7 overflow-y-auto pr-2 space-y-4">
-                {loading ? (
-                  <div className="py-20 flex justify-center text-primary-600">
-                    <Loader2 className="w-8 h-8 animate-spin" />
-                  </div>
-                ) : properties.length === 0 ? (
-                  <div className="text-center py-16 bg-white rounded-xl border border-estate-200">
-                    <Building2 className="w-12 h-12 mx-auto text-estate-300 mb-2" />
-                    <h3 className="font-bold text-estate-900 text-base">No properties found</h3>
-                    <p className="text-xs text-estate-500 mt-1">Try clearing filters or moving the map.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {properties.map((p) => (
-                      <div
-                        key={p.id}
-                        onMouseEnter={() => setSelectedProperty(p)}
-                        className={`transition-all rounded-xl ${
-                          selectedProperty?.id === p.id ? 'ring-2 ring-primary-500 shadow-md' : ''
-                        }`}
-                      >
-                        <PropertyCard
-                          property={p}
-                          onCompareToggle={toggleCompare}
-                          isComparing={compareList.some((c) => c.id === p.id)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Map column */}
-              <div className="xl:col-span-5 h-[350px] xl:h-full sticky top-24">
+        <div className="lg:col-span-9 space-y-6">
+          {/* Split Mode: Top Map + Bottom Grid */}
+          {viewMode === 'split' && (
+            <div className="space-y-6">
+              <div className="h-[380px] w-full rounded-2xl overflow-hidden shadow-sm border border-estate-200">
                 <PropertyMap
                   properties={properties}
                   selectedProperty={selectedProperty}
-                  onSelectProperty={setSelectedProperty}
+                  onSelectProperty={(p) => setSelectedProperty(p)}
                   onBoundsChange={handleBboxChange}
+                  center={mapCenter}
+                  zoom={12}
+                  onLocateMe={handleLocateMe}
+                  onCitySelect={handleCitySelect}
                 />
               </div>
-            </div>
-          ) : (
-            <div className="space-y-6">
+
               {loading ? (
-                <div className="py-20 flex justify-center text-primary-600">
-                  <Loader2 className="w-8 h-8 animate-spin" />
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
                 </div>
               ) : properties.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-2xl border border-estate-200">
-                  <Building2 className="w-12 h-12 mx-auto text-estate-300 mb-2" />
-                  <h3 className="font-bold text-estate-900 text-base">No listings match your criteria</h3>
-                  <p className="text-xs text-estate-500 mt-1">Try loosening price or location filters</p>
-                </div>
+                <EmptySearchState onReset={handleResetFilters} />
               ) : (
-                <div
-                  className={
-                    viewMode === 'grid'
-                      ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'
-                      : 'grid grid-cols-1 gap-4'
-                  }
-                >
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                   {properties.map((p) => (
                     <PropertyCard
                       key={p.id}
                       property={p}
-                      onCompareToggle={toggleCompare}
-                      isComparing={compareList.some((c) => c.id === p.id)}
+                      isSelected={selectedProperty?.id === p.id}
+                      onSelect={() => setSelectedProperty(p)}
+                      onCompare={() => toggleCompare(p)}
+                      isCompared={compareList.some((item) => item.id === p.id)}
                     />
                   ))}
                 </div>
               )}
+            </div>
+          )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 pt-6">
-                  <button
-                    disabled={page <= 1}
-                    onClick={() => setPage(page - 1)}
-                    className="p-2 border border-estate-300 rounded-lg hover:bg-estate-50 disabled:opacity-50"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <span className="text-xs font-semibold px-4 text-estate-700">
-                    Page {page} of {totalPages}
-                  </span>
-                  <button
-                    disabled={page >= totalPages}
-                    onClick={() => setPage(page + 1)}
-                    className="p-2 border border-estate-300 rounded-lg hover:bg-estate-50 disabled:opacity-50"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+          {/* Grid Only Mode */}
+          {viewMode === 'grid' && (
+            <div>
+              {loading ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                </div>
+              ) : properties.length === 0 ? (
+                <EmptySearchState onReset={handleResetFilters} />
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                  {properties.map((p) => (
+                    <PropertyCard
+                      key={p.id}
+                      property={p}
+                      isSelected={selectedProperty?.id === p.id}
+                      onSelect={() => setSelectedProperty(p)}
+                      onCompare={() => toggleCompare(p)}
+                      isCompared={compareList.some((item) => item.id === p.id)}
+                    />
+                  ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* List Only Mode */}
+          {viewMode === 'list' && (
+            <div className="space-y-4">
+              {loading ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+                </div>
+              ) : properties.length === 0 ? (
+                <EmptySearchState onReset={handleResetFilters} />
+              ) : (
+                properties.map((p) => (
+                  <PropertyCard
+                    key={p.id}
+                    property={p}
+                    layout="horizontal"
+                    isSelected={selectedProperty?.id === p.id}
+                    onSelect={() => setSelectedProperty(p)}
+                    onCompare={() => toggleCompare(p)}
+                    isCompared={compareList.some((item) => item.id === p.id)}
+                  />
+                ))
+              )}
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between pt-6 border-t border-estate-200">
+              <span className="text-xs text-estate-500">
+                Page {page} of {totalPages}
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  className="btn-outline p-2 text-xs disabled:opacity-40"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                  className="btn-outline p-2 text-xs disabled:opacity-40"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Floating Compare Bar */}
+      {/* Floating Compare Drawer Bar */}
       {compareList.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-estate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
-          <Scale className="w-5 h-5 text-primary-400" />
-          <span className="text-xs font-medium">
-            <strong className="text-white font-bold">{compareList.length}</strong> properties selected for comparison
-          </span>
-          <button
-            onClick={() => setIsCompareOpen(true)}
-            className="btn-primary text-xs py-1.5 px-3 shadow"
-          >
-            Compare Now
-          </button>
-          <button
-            onClick={() => setCompareList([])}
-            className="text-xs text-estate-400 hover:text-white underline ml-1"
-          >
-            Clear
-          </button>
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-estate-900 text-white rounded-2xl p-3.5 px-6 shadow-2xl flex items-center gap-4 border border-estate-700 animate-in slide-in-from-bottom">
+          <div className="flex items-center gap-2">
+            <Scale className="w-4 h-4 text-primary-400" />
+            <span className="text-xs font-bold">{compareList.length} properties selected to compare</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsCompareOpen(true)}
+              className="bg-primary-600 hover:bg-primary-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all"
+            >
+              Compare Side-by-Side
+            </button>
+            <button
+              onClick={() => setCompareList([])}
+              className="text-xs text-estate-400 hover:text-white px-2 py-1"
+            >
+              Clear
+            </button>
+          </div>
         </div>
       )}
 
       {/* Compare Modal */}
-      <CompareModal
-        properties={compareList}
-        isOpen={isCompareOpen}
-        onClose={() => setIsCompareOpen(false)}
-        onRemove={(id) => setCompareList(compareList.filter((p) => p.id !== id))}
-      />
+      {isCompareOpen && (
+        <CompareModal
+          properties={compareList}
+          isOpen={isCompareOpen}
+          onClose={() => setIsCompareOpen(false)}
+          onRemove={(id) => setCompareList((prev) => prev.filter((p) => p.id !== id))}
+        />
+      )}
+    </div>
+  );
+}
+
+function EmptySearchState({ onReset }: { onReset: () => void }) {
+  return (
+    <div className="bg-white rounded-2xl border border-estate-200 p-12 text-center space-y-4">
+      <div className="w-16 h-16 rounded-2xl bg-estate-100 text-estate-400 flex items-center justify-center mx-auto">
+        <Building2 className="w-8 h-8" />
+      </div>
+      <div>
+        <h3 className="text-lg font-bold text-estate-900">No properties found</h3>
+        <p className="text-xs text-estate-500 mt-1 max-w-sm mx-auto">
+          We couldn't find any listings matching your exact criteria. Try broadening your budget, clearing selected amenities, or exploring nearby cities.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={onReset}
+        className="btn-outline text-xs py-2 px-4 inline-flex items-center gap-1.5"
+      >
+        <RotateCcw className="w-3.5 h-3.5" />
+        Reset All Filters
+      </button>
     </div>
   );
 }

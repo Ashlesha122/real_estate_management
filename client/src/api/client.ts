@@ -36,7 +36,14 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Do not attempt refresh on auth endpoints or if there was no token
+    const isAuthEndpoint = originalRequest?.url?.includes('/auth/login') ||
+      originalRequest?.url?.includes('/auth/register') ||
+      originalRequest?.url?.includes('/auth/refresh');
+
+    const hasToken = !!localStorage.getItem('accessToken');
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint && hasToken) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
@@ -59,7 +66,10 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         localStorage.removeItem('accessToken');
-        window.location.href = '/login';
+        const path = window.location.pathname;
+        if (path.startsWith('/dashboard') || path.startsWith('/profile') || path.startsWith('/verify')) {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

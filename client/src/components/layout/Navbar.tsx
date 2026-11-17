@@ -4,7 +4,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { UserRole } from '../../types';
 import NotificationBell from '../notifications/NotificationBell';
 import {
-  Building2,
   Menu,
   X,
   User,
@@ -12,7 +11,6 @@ import {
   PlusCircle,
   Heart,
   Calendar,
-  MessageSquare,
   LayoutDashboard,
   ChevronDown
 } from 'lucide-react';
@@ -45,14 +43,17 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-estate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-700 to-primary-500 flex items-center justify-center text-white shadow-md shadow-primary-500/20 group-hover:scale-105 transition-transform">
-              <Building2 className="w-6 h-6" />
+            <div className="w-9 h-9 rounded-xl overflow-hidden shadow-md shadow-primary-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+              <img src="/estateflow-logo.svg" alt="EstateFlow Logo" className="w-full h-full object-cover" />
             </div>
-            <div>
-              <span className="font-display font-extrabold text-xl tracking-tight text-estate-900 group-hover:text-primary-600 transition-colors">
+            <div className="flex flex-col">
+              <span className="font-display font-extrabold text-xl tracking-tight text-estate-900 group-hover:text-primary-600 transition-colors leading-none">
                 Estate<span className="text-primary-600">Flow</span>
+              </span>
+              <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider mt-0.5">
+                Zero Brokerage
               </span>
             </div>
           </Link>

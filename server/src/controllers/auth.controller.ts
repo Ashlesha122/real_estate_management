@@ -244,7 +244,21 @@ export class AuthController {
         path: '/',
       });
 
-      res.json({ message: 'Phone verified successfully', accessToken });
+      res.json({
+        message: 'Phone verified successfully',
+        accessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.full_name,
+          phone: user.phone,
+          role: user.role,
+          phoneVerified: true,
+          contactPreference: user.contact_preference,
+          avatarUrl: user.avatar_url || null,
+          createdAt: user.created_at,
+        },
+      });
     } catch (error) {
       next(error);
     }

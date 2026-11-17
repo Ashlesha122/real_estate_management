@@ -14,7 +14,8 @@ export class WishlistController {
 
   async add(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { propertyId } = z.object({ propertyId: z.string().uuid() }).parse(req.body);
+      const rawPropId = (req.params.propertyId as string) || req.body?.propertyId;
+      const propertyId = z.string().uuid().parse(rawPropId);
       await wishlistRepository.add(req.user!.id, propertyId);
       res.status(201).json({ message: 'Added to wishlist' });
     } catch (error) { next(error); }
