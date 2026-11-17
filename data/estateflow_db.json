@@ -168,6 +168,201 @@
       "avatar_url": null,
       "created_at": "2026-11-17T18:00:54.189Z",
       "updated_at": "2026-11-17T18:00:54.323Z"
+    },
+    {
+      "id": "3448eaf3-1315-49fc-b761-f1e338564c44",
+      "email": "newuser_1794939881346@example.com",
+      "phone": "+919999988888",
+      "password_hash": "$2a$10$gzLoTAWK.X1fYq0SzmF9EORsUumDezYDbAg5obiwT3jXi0RTbzN/G",
+      "full_name": "Startup QA Tester Updated",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "WHATSAPP",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:24:41.480Z",
+      "updated_at": "2026-11-17T18:24:41.598Z"
+    },
+    {
+      "id": "097a695f-a078-402f-af0a-cb0a34c304af",
+      "email": "newuser_1794939932180@example.com",
+      "phone": "+919999988888",
+      "password_hash": "$2a$10$fcMMblTtO.JYTRumpFkKMekkDcM.Xtze3KM0RgAVMpAcsIyzZFHqi",
+      "full_name": "Startup QA Tester Updated",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "WHATSAPP",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:25:32.287Z",
+      "updated_at": "2026-11-17T18:25:32.398Z"
+    },
+    {
+      "id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "email": "newuser_359517@example.com",
+      "phone": "+919835951712",
+      "password_hash": "$2a$10$vw8aCLY5lD3EB9PyX0qICursIw8JEgyALhKJg2WPVJfpkv7lzyLxi",
+      "full_name": "New User 359517",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:25:51.686Z",
+      "updated_at": "2026-11-17T18:25:51.759Z"
+    },
+    {
+      "id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "email": "newowner_359517@example.com",
+      "phone": "+919735951734",
+      "password_hash": "$2a$10$.rq2kwDp5vSB.bbOoYdbfe/tB6hURLPehhi6NW0awj8w3Vw7mJA7y",
+      "full_name": "New Owner 359517",
+      "role": "OWNER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:25:52.159Z",
+      "updated_at": "2026-11-17T18:25:52.250Z"
+    },
+    {
+      "id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "email": "newuser_841205@example.com",
+      "phone": "+919884120512",
+      "password_hash": "$2a$10$ewSIAu/zmRhF6fM6ZbjWSeWqpwvIWExZxR825KPvm9nz/vZtDJsJG",
+      "full_name": "New User 841205",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:36:52.599Z",
+      "updated_at": "2026-11-17T18:36:52.673Z"
+    },
+    {
+      "id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "email": "newowner_841205@example.com",
+      "phone": "+919784120534",
+      "password_hash": "$2a$10$1lUYnvjauKnqp4Y9ZtLK.OqRVLpiksyn0XTQl2.YPb82q6EaPRI1q",
+      "full_name": "New Owner 841205",
+      "role": "OWNER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:36:52.987Z",
+      "updated_at": "2026-11-17T18:36:53.051Z"
+    },
+    {
+      "id": "22ad1ab8-7168-4d17-bfd5-bfe96490c479",
+      "email": "valid_user_1794940640307@test.com",
+      "phone": "+919876543210",
+      "password_hash": "$2a$10$2NdhOcavcPIP9Z3am5/zhuBqmYIf3SDxsX1GbqN7oZ6tKhg4zzO6S",
+      "full_name": "Valid User",
+      "role": "BUYER",
+      "phone_verified": false,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:37:20.460Z",
+      "updated_at": "2026-11-17T18:37:20.460Z"
+    },
+    {
+      "id": "d8f11984-fc9e-4324-8627-1a2735b018bb",
+      "email": "ashleshapurohit574@gmail.com",
+      "phone": "9359945870",
+      "password_hash": "$2a$10$A2rbqLTNiK9qTK4ck1iPyuChJyOnoVAmWSlkzt3tuILVSBb.zHf0a",
+      "full_name": "Ashlesha Purohit",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:38:44.031Z",
+      "updated_at": "2026-11-17T18:39:31.646Z"
+    },
+    {
+      "id": "9ef0aaf7-a767-4263-9f21-bb5170486ff8",
+      "email": "direct_auth_1794941376840@example.com",
+      "phone": "+919876543210",
+      "password_hash": "$2a$10$A.YHDxf1fDNwvTA/WU9B9uJm4VZnwljsAE4ggwf6pNHWNsxEsJDWe",
+      "full_name": "Direct User",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:49:37.066Z",
+      "updated_at": "2026-11-17T18:49:37.069Z"
+    },
+    {
+      "id": "e857300e-9851-49e9-9a91-07a27856d121",
+      "email": "direct_auth_1794941393417@example.com",
+      "phone": "+919876543210",
+      "password_hash": "$2a$10$oNhTyUCksot6qdg78LlawONgzuZfDljS9BQIFRHnzsJ/STZt9V0vS",
+      "full_name": "Direct User",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:49:53.759Z",
+      "updated_at": "2026-11-17T18:49:54.018Z"
+    },
+    {
+      "id": "af076ae9-4875-414d-8fe4-eb78ee241c01",
+      "email": "newuser_600073@example.com",
+      "phone": "+919860007312",
+      "password_hash": "$2a$10$JiiTCemmzEkku/YT7/NQQeBSTFnTFmbfTCqUKGWdSC8QvHwCZGOOS",
+      "full_name": "New User 600073",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:50:01.815Z",
+      "updated_at": "2026-11-17T18:50:01.818Z"
+    },
+    {
+      "id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "email": "newuser_474740@example.com",
+      "phone": "+919847474012",
+      "password_hash": "$2a$10$6FXznfROgZ/YOK7Zf.P2KuoxGF67Zks5160PjMKiV6zloabWilqhS",
+      "full_name": "New User 474740",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:50:33.704Z",
+      "updated_at": "2026-11-17T18:50:33.710Z"
+    },
+    {
+      "id": "a6e08647-22cd-46c3-ae9a-91560af8614a",
+      "email": "newowner_474740@example.com",
+      "phone": "+919747474034",
+      "password_hash": "$2a$10$lcDDJbOjmgoStNcgu6mCs.HuS0O6lDYw9x0.QO9ZbZ9/soHoFeo7O",
+      "full_name": "New Owner 474740",
+      "role": "OWNER",
+      "phone_verified": true,
+      "contact_preference": "CALL",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:50:34.186Z",
+      "updated_at": "2026-11-17T18:50:34.190Z"
+    },
+    {
+      "id": "745a084a-51c4-44a6-8212-d47ca84cb9fe",
+      "email": "newuser_1794941455263@example.com",
+      "phone": "+919999988888",
+      "password_hash": "$2a$10$vtQNV7zhYa81KKr869ThPOy67xOkxMpwaVuLRyEfL9m/9jaPgh13C",
+      "full_name": "Startup QA Tester Updated",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "WHATSAPP",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:50:55.427Z",
+      "updated_at": "2026-11-17T18:50:55.497Z"
+    },
+    {
+      "id": "0a4dd74c-3884-4289-acf0-ba0bf0ab0bea",
+      "email": "newuser_1794941486810@example.com",
+      "phone": "+919999988888",
+      "password_hash": "$2a$10$hMoFt9bEt4.ltmkAmmJxguADHQKUWBsZyB9EwW9m5EGmL9WNNpYCC",
+      "full_name": "Startup QA Tester Updated",
+      "role": "BUYER",
+      "phone_verified": true,
+      "contact_preference": "WHATSAPP",
+      "avatar_url": null,
+      "created_at": "2026-11-17T18:51:26.973Z",
+      "updated_at": "2026-11-17T18:51:27.034Z"
     }
   ],
   "properties": [
@@ -207,7 +402,7 @@
       "latitude": 18.9832,
       "longitude": 72.8228,
       "status": "ACTIVE",
-      "view_count": 24,
+      "view_count": 26,
       "created_at": "2026-10-08T17:43:26.069Z",
       "updated_at": "2026-11-17T17:43:26.069Z",
       "published_at": "2026-10-08T17:43:26.069Z"
@@ -1993,10 +2188,254 @@
       "longitude": 77.6412,
       "latitude": 12.9716,
       "status": "ACTIVE",
-      "view_count": 0,
+      "view_count": 1,
       "created_at": "2026-11-17T18:00:54.406Z",
       "updated_at": "2026-11-17T18:00:54.487Z",
       "published_at": "2026-11-17T18:00:54.487Z"
+    },
+    {
+      "id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "owner_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "New Luxury Penthouse Indiranagar",
+      "description": "Brand new luxury penthouse with private terrace in Indiranagar, Bangalore.",
+      "type": "APARTMENT",
+      "purpose": "SALE",
+      "asking_price": 35000000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": 2800,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": 10,
+      "total_floors": 12,
+      "furnishing": "FULLY_FURNISHED",
+      "parking": 2,
+      "amenities": [
+        "Gym",
+        "Swimming Pool",
+        "Security",
+        "Power Backup"
+      ],
+      "street_address": "100 Feet Road, Indiranagar",
+      "city": "Bangalore",
+      "locality": "Indiranagar",
+      "postal_code": "560038",
+      "longitude": 77.6412,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 1,
+      "created_at": "2026-11-17T18:24:41.650Z",
+      "updated_at": "2026-11-17T18:24:41.721Z",
+      "published_at": "2026-11-17T18:24:41.721Z"
+    },
+    {
+      "id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "owner_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "New Luxury Penthouse Indiranagar",
+      "description": "Brand new luxury penthouse with private terrace in Indiranagar, Bangalore.",
+      "type": "APARTMENT",
+      "purpose": "SALE",
+      "asking_price": 35000000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": 2800,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": 10,
+      "total_floors": 12,
+      "furnishing": "FULLY_FURNISHED",
+      "parking": 2,
+      "amenities": [
+        "Gym",
+        "Swimming Pool",
+        "Security",
+        "Power Backup"
+      ],
+      "street_address": "100 Feet Road, Indiranagar",
+      "city": "Bangalore",
+      "locality": "Indiranagar",
+      "postal_code": "560038",
+      "longitude": 77.6412,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 2,
+      "created_at": "2026-11-17T18:25:32.464Z",
+      "updated_at": "2026-11-17T18:25:32.535Z",
+      "published_at": "2026-11-17T18:25:32.535Z"
+    },
+    {
+      "id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "owner_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "Brand New Sunny Villa 359517",
+      "description": "Stunning villa posted by a newly registered owner",
+      "type": "VILLA",
+      "purpose": "SALE",
+      "asking_price": 18500000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": null,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": null,
+      "total_floors": null,
+      "furnishing": null,
+      "parking": 0,
+      "amenities": [],
+      "street_address": null,
+      "city": "Bengaluru",
+      "locality": null,
+      "postal_code": null,
+      "longitude": 77.5946,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 0,
+      "created_at": "2026-11-17T18:25:52.289Z",
+      "updated_at": "2026-11-17T18:25:52.380Z",
+      "published_at": "2026-11-17T18:25:52.380Z"
+    },
+    {
+      "id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "owner_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "Brand New Sunny Villa 841205",
+      "description": "Stunning villa posted by a newly registered owner",
+      "type": "VILLA",
+      "purpose": "SALE",
+      "asking_price": 18500000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": null,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": null,
+      "total_floors": null,
+      "furnishing": null,
+      "parking": 0,
+      "amenities": [],
+      "street_address": null,
+      "city": "Bengaluru",
+      "locality": null,
+      "postal_code": null,
+      "longitude": 77.5946,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 0,
+      "created_at": "2026-11-17T18:36:53.072Z",
+      "updated_at": "2026-11-17T18:36:53.135Z",
+      "published_at": "2026-11-17T18:36:53.135Z"
+    },
+    {
+      "id": "d572ac24-708f-415c-aab4-070917bfd97d",
+      "owner_id": "a6e08647-22cd-46c3-ae9a-91560af8614a",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "Brand New Sunny Villa 474740",
+      "description": "Stunning villa posted by a newly registered owner",
+      "type": "VILLA",
+      "purpose": "SALE",
+      "asking_price": 18500000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": null,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": null,
+      "total_floors": null,
+      "furnishing": null,
+      "parking": 0,
+      "amenities": [],
+      "street_address": null,
+      "city": "Bengaluru",
+      "locality": null,
+      "postal_code": null,
+      "longitude": 77.5946,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 1,
+      "created_at": "2026-11-17T18:50:34.222Z",
+      "updated_at": "2026-11-17T18:50:34.332Z",
+      "published_at": "2026-11-17T18:50:34.332Z"
+    },
+    {
+      "id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "owner_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "New Luxury Penthouse Indiranagar",
+      "description": "Brand new luxury penthouse with private terrace in Indiranagar, Bangalore.",
+      "type": "APARTMENT",
+      "purpose": "SALE",
+      "asking_price": 35000000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": 2800,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": 10,
+      "total_floors": 12,
+      "furnishing": "FULLY_FURNISHED",
+      "parking": 2,
+      "amenities": [
+        "Gym",
+        "Swimming Pool",
+        "Security",
+        "Power Backup"
+      ],
+      "street_address": "100 Feet Road, Indiranagar",
+      "city": "Bangalore",
+      "locality": "Indiranagar",
+      "postal_code": "560038",
+      "longitude": 77.6412,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 1,
+      "created_at": "2026-11-17T18:50:55.573Z",
+      "updated_at": "2026-11-17T18:50:55.661Z",
+      "published_at": "2026-11-17T18:50:55.661Z"
+    },
+    {
+      "id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "owner_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "broker_id": null,
+      "handling_mode": "DIRECT",
+      "title": "New Luxury Penthouse Indiranagar",
+      "description": "Brand new luxury penthouse with private terrace in Indiranagar, Bangalore.",
+      "type": "APARTMENT",
+      "purpose": "SALE",
+      "asking_price": 35000000,
+      "security_deposit": null,
+      "area_sqft": 3200,
+      "carpet_area_sqft": 2800,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "floor_level": 10,
+      "total_floors": 12,
+      "furnishing": "FULLY_FURNISHED",
+      "parking": 2,
+      "amenities": [
+        "Gym",
+        "Swimming Pool",
+        "Security",
+        "Power Backup"
+      ],
+      "street_address": "100 Feet Road, Indiranagar",
+      "city": "Bangalore",
+      "locality": "Indiranagar",
+      "postal_code": "560038",
+      "longitude": 77.6412,
+      "latitude": 12.9716,
+      "status": "ACTIVE",
+      "view_count": 1,
+      "created_at": "2026-11-17T18:51:27.110Z",
+      "updated_at": "2026-11-17T18:51:27.191Z",
+      "published_at": "2026-11-17T18:51:27.191Z"
     }
   ],
   "media": [
@@ -3124,6 +3563,69 @@
       "sort_order": 0,
       "is_cover": true,
       "created_at": "2026-11-17T18:00:54.457Z"
+    },
+    {
+      "id": "138395b3-d62e-425b-96f5-f8ef42544294",
+      "property_id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:24:41.699Z"
+    },
+    {
+      "id": "79cef567-54f0-4b41-ab3e-6b3760975e2b",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:25:32.509Z"
+    },
+    {
+      "id": "6946b214-f8de-4439-98f6-55fc7eb32967",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:25:52.353Z"
+    },
+    {
+      "id": "98d683d9-6768-4adf-ad6e-41828063ef27",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:36:53.114Z"
+    },
+    {
+      "id": "52fe6c07-e4b2-4e1b-8cae-b368dbfcc1dd",
+      "property_id": "d572ac24-708f-415c-aab4-070917bfd97d",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:50:34.295Z"
+    },
+    {
+      "id": "2a6bbc43-9109-408d-b849-e33a4c4cc6f6",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:50:55.634Z"
+    },
+    {
+      "id": "cf25f07f-e047-4250-8b12-7719beba7655",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+      "media_type": "IMAGE",
+      "sort_order": 0,
+      "is_cover": true,
+      "created_at": "2026-11-17T18:51:27.158Z"
     }
   ],
   "inquiries": [
@@ -3269,6 +3771,123 @@
       "read": false,
       "created_at": "2026-11-17T18:00:54.573Z",
       "updated_at": "2026-11-17T18:00:54.888Z"
+    },
+    {
+      "id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "property_id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in scheduling a site visit this weekend!",
+      "contact_mode": "CALL",
+      "preferred_visit_time": null,
+      "stage": "SITE_VISIT_SCHEDULED",
+      "read": false,
+      "created_at": "2026-11-17T18:24:41.795Z",
+      "updated_at": "2026-11-17T18:24:42.019Z"
+    },
+    {
+      "id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in scheduling a site visit this weekend!",
+      "contact_mode": "CALL",
+      "preferred_visit_time": null,
+      "stage": "SITE_VISIT_SCHEDULED",
+      "read": false,
+      "created_at": "2026-11-17T18:25:32.590Z",
+      "updated_at": "2026-11-17T18:25:32.878Z"
+    },
+    {
+      "id": "fe280648-21d7-4626-a326-f6091c8b901b",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "buyer_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in visiting this property.",
+      "contact_mode": "WHATSAPP",
+      "preferred_visit_time": "2026-11-20T18:25:51.829Z",
+      "stage": "NEW",
+      "read": false,
+      "created_at": "2026-11-17T18:25:51.829Z",
+      "updated_at": "2026-11-17T18:25:51.829Z"
+    },
+    {
+      "id": "16a87f08-74cd-4474-8abf-e00ee549cf69",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "buyer_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "handler_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "message": "Hello, I am interested in visiting this property.",
+      "contact_mode": "WHATSAPP",
+      "preferred_visit_time": "2026-11-20T18:36:52.723Z",
+      "stage": "NEW",
+      "read": false,
+      "created_at": "2026-11-17T18:36:52.730Z",
+      "updated_at": "2026-11-17T18:36:52.730Z"
+    },
+    {
+      "id": "8d09c97f-f817-4557-ac0d-8a9b88d4a1ac",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "buyer_id": "d8f11984-fc9e-4324-8627-1a2735b018bb",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hi, I am interested in this property. Please let me know more details and when I can view it.",
+      "contact_mode": "WHATSAPP",
+      "preferred_visit_time": null,
+      "stage": "NEW",
+      "read": false,
+      "created_at": "2026-11-17T18:40:23.172Z",
+      "updated_at": "2026-11-17T18:40:23.172Z"
+    },
+    {
+      "id": "817c592a-0ca7-453b-a2a3-b1bfd2ad02d8",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "buyer_id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "handler_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "message": "Hello, I am interested in visiting this property.",
+      "contact_mode": "WHATSAPP",
+      "preferred_visit_time": "2026-11-20T18:50:33.803Z",
+      "stage": "NEW",
+      "read": false,
+      "created_at": "2026-11-17T18:50:33.811Z",
+      "updated_at": "2026-11-17T18:50:33.811Z"
+    },
+    {
+      "id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in scheduling a site visit this weekend!",
+      "contact_mode": "CALL",
+      "preferred_visit_time": null,
+      "stage": "SITE_VISIT_SCHEDULED",
+      "read": false,
+      "created_at": "2026-11-17T18:50:55.744Z",
+      "updated_at": "2026-11-17T18:50:56.015Z"
+    },
+    {
+      "id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in scheduling a site visit this weekend!",
+      "contact_mode": "CALL",
+      "preferred_visit_time": null,
+      "stage": "SITE_VISIT_SCHEDULED",
+      "read": false,
+      "created_at": "2026-11-17T18:51:27.271Z",
+      "updated_at": "2026-11-17T18:51:27.568Z"
+    },
+    {
+      "id": "607ad02b-5b9e-4da5-a5d2-4b169755dfea",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "message": "Hello, I am interested in this luxury listing. Please share floor plan and schedule visit.",
+      "contact_mode": "CALL",
+      "preferred_visit_time": null,
+      "stage": "SITE_VISIT_SCHEDULED",
+      "read": false,
+      "created_at": "2026-11-17T18:59:49.319Z",
+      "updated_at": "2026-11-17T18:59:49.419Z"
     }
   ],
   "inquiryNotes": [
@@ -3334,6 +3953,41 @@
       "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
       "body": "Called client, very interested in pricing negotiations.",
       "created_at": "2026-11-17T18:00:54.644Z"
+    },
+    {
+      "id": "aec9423f-1576-4f70-8290-f894752f576e",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "body": "Called client, very interested in pricing negotiations.",
+      "created_at": "2026-11-17T18:24:41.852Z"
+    },
+    {
+      "id": "e774d840-8c37-4d1a-80ed-84653ad68295",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "body": "Called client, very interested in pricing negotiations.",
+      "created_at": "2026-11-17T18:25:32.663Z"
+    },
+    {
+      "id": "0cdd17ac-b8b3-4446-90d3-7546f0a42a4a",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "body": "Called client, very interested in pricing negotiations.",
+      "created_at": "2026-11-17T18:50:55.827Z"
+    },
+    {
+      "id": "e145ab8d-39a3-4d83-bc8d-dfd920d8880c",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "body": "Called client, very interested in pricing negotiations.",
+      "created_at": "2026-11-17T18:51:27.359Z"
+    },
+    {
+      "id": "6c8eeb20-120e-40b8-b56e-84e899fb053b",
+      "inquiry_id": "607ad02b-5b9e-4da5-a5d2-4b169755dfea",
+      "author_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "body": "Buyer is highly qualified. Scheduled preliminary call.",
+      "created_at": "2026-11-17T18:59:49.461Z"
     }
   ],
   "inquiryActivities": [
@@ -3620,6 +4274,300 @@
       "event_type": "VISIT_CONFIRMED",
       "metadata": null,
       "created_at": "2026-11-17T18:00:54.908Z"
+    },
+    {
+      "id": "20b5bf13-6a98-4f58-ad90-538a6c5cfa84",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "CALL"
+      },
+      "created_at": "2026-11-17T18:24:41.808Z"
+    },
+    {
+      "id": "2777c253-d13e-45cd-aa18-eda9a48ba940",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "NOTE_ADDED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:24:41.857Z"
+    },
+    {
+      "id": "b7ef5099-d165-432e-b18e-60756cfc980f",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "STAGE_CHANGED",
+      "metadata": {
+        "from": "SITE_VISIT_SCHEDULED",
+        "to": "SITE_VISIT_SCHEDULED"
+      },
+      "created_at": "2026-11-17T18:24:41.887Z"
+    },
+    {
+      "id": "ac44120e-b4fd-414f-8ea9-1409a954e038",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "5d3b5ce9-396a-4442-8103-5c10d8ebc33c",
+        "scheduledAt": "2026-11-19T18:24:41.913Z"
+      },
+      "created_at": "2026-11-17T18:24:41.924Z"
+    },
+    {
+      "id": "5c567b9d-a370-4792-a267-fb2e8fcb0244",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "VISIT_CONFIRMED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:24:42.027Z"
+    },
+    {
+      "id": "f7730737-3a74-44e5-9a45-54fd1234a78d",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "CALL"
+      },
+      "created_at": "2026-11-17T18:25:32.599Z"
+    },
+    {
+      "id": "fb43fe48-c8fe-45fc-864f-6430adfc80b2",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "NOTE_ADDED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:25:32.672Z"
+    },
+    {
+      "id": "1e374443-d5a1-4fe0-992e-8af1ba86e496",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "STAGE_CHANGED",
+      "metadata": {
+        "from": "SITE_VISIT_SCHEDULED",
+        "to": "SITE_VISIT_SCHEDULED"
+      },
+      "created_at": "2026-11-17T18:25:32.713Z"
+    },
+    {
+      "id": "7fedff90-c94d-4f4d-9ebe-9cc824d465a5",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "3013f79d-3ef5-467d-abcf-e6e03ad489c4",
+        "scheduledAt": "2026-11-19T18:25:32.747Z"
+      },
+      "created_at": "2026-11-17T18:25:32.769Z"
+    },
+    {
+      "id": "e52abcda-57fc-4971-8db4-22a4c483da0e",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "VISIT_CONFIRMED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:25:32.898Z"
+    },
+    {
+      "id": "f04062a8-a14e-417c-ac5e-b9cda4eb144a",
+      "inquiry_id": "fe280648-21d7-4626-a326-f6091c8b901b",
+      "actor_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "WHATSAPP"
+      },
+      "created_at": "2026-11-17T18:25:51.836Z"
+    },
+    {
+      "id": "ef25bb55-0c22-40b2-9d3c-1f0d15c3caec",
+      "inquiry_id": "fe280648-21d7-4626-a326-f6091c8b901b",
+      "actor_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "47f38fb1-58bc-427a-b66b-c4b97dd02d8b",
+        "scheduledAt": "2026-11-20T18:25:51.895Z"
+      },
+      "created_at": "2026-11-17T18:25:51.913Z"
+    },
+    {
+      "id": "34f5a3a1-afd3-4522-8a3b-50098bde50dd",
+      "inquiry_id": "16a87f08-74cd-4474-8abf-e00ee549cf69",
+      "actor_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "WHATSAPP"
+      },
+      "created_at": "2026-11-17T18:36:52.734Z"
+    },
+    {
+      "id": "a28b4e69-dcf0-4270-9771-73682926a37a",
+      "inquiry_id": "16a87f08-74cd-4474-8abf-e00ee549cf69",
+      "actor_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "d3fe24ad-9d15-4951-8df2-0d555476b90a",
+        "scheduledAt": "2026-11-20T18:36:52.764Z"
+      },
+      "created_at": "2026-11-17T18:36:52.776Z"
+    },
+    {
+      "id": "991497d2-db67-405a-b209-3e149a911d52",
+      "inquiry_id": "8d09c97f-f817-4557-ac0d-8a9b88d4a1ac",
+      "actor_id": "d8f11984-fc9e-4324-8627-1a2735b018bb",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "WHATSAPP"
+      },
+      "created_at": "2026-11-17T18:40:23.186Z"
+    },
+    {
+      "id": "af1de7f2-7e3a-4c31-aabc-e9634ee17791",
+      "inquiry_id": "817c592a-0ca7-453b-a2a3-b1bfd2ad02d8",
+      "actor_id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "WHATSAPP"
+      },
+      "created_at": "2026-11-17T18:50:33.818Z"
+    },
+    {
+      "id": "73cc30e7-a8a7-4b43-b86a-58b2c948238f",
+      "inquiry_id": "817c592a-0ca7-453b-a2a3-b1bfd2ad02d8",
+      "actor_id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "ed65c418-92ae-4329-9842-385d538b9051",
+        "scheduledAt": "2026-11-20T18:50:33.870Z"
+      },
+      "created_at": "2026-11-17T18:50:33.890Z"
+    },
+    {
+      "id": "5566e80c-61f2-4c08-a327-6b3950dad73f",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "CALL"
+      },
+      "created_at": "2026-11-17T18:50:55.755Z"
+    },
+    {
+      "id": "2941ddcd-a4bf-451c-9a1f-fae5a228b4f0",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "NOTE_ADDED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:50:55.834Z"
+    },
+    {
+      "id": "d7ac5362-6471-4b06-a332-dd439dc5819e",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "STAGE_CHANGED",
+      "metadata": {
+        "from": "SITE_VISIT_SCHEDULED",
+        "to": "SITE_VISIT_SCHEDULED"
+      },
+      "created_at": "2026-11-17T18:50:55.879Z"
+    },
+    {
+      "id": "f9a2803d-c03e-46f8-ad41-35738a48a3ed",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "678545c5-992d-43a6-80c0-0845ba5196f9",
+        "scheduledAt": "2026-11-19T18:50:55.901Z"
+      },
+      "created_at": "2026-11-17T18:50:55.925Z"
+    },
+    {
+      "id": "8a97c8c2-1127-480f-87e6-daaff4c89deb",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "VISIT_CONFIRMED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:50:56.047Z"
+    },
+    {
+      "id": "d065d0be-33de-4741-94a7-6bf98a54b64e",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "CALL"
+      },
+      "created_at": "2026-11-17T18:51:27.284Z"
+    },
+    {
+      "id": "c4356ae8-8c51-4c03-9383-6774439199a6",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "NOTE_ADDED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:51:27.380Z"
+    },
+    {
+      "id": "cc986d58-1851-4510-b4f8-95aaae87dc3c",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "STAGE_CHANGED",
+      "metadata": {
+        "from": "SITE_VISIT_SCHEDULED",
+        "to": "SITE_VISIT_SCHEDULED"
+      },
+      "created_at": "2026-11-17T18:51:27.436Z"
+    },
+    {
+      "id": "fedec395-0532-45fa-8e71-20f73fe84b30",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "VISIT_REQUESTED",
+      "metadata": {
+        "visitId": "e19470f2-2c9b-4b16-b4d2-059f2aac2872",
+        "scheduledAt": "2026-11-19T18:51:27.465Z"
+      },
+      "created_at": "2026-11-17T18:51:27.494Z"
+    },
+    {
+      "id": "258080b7-6b2c-48bb-b58c-c2801605843b",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "VISIT_CONFIRMED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:51:27.594Z"
+    },
+    {
+      "id": "2d04c37c-e353-4dba-bca7-a8d0444fef23",
+      "inquiry_id": "607ad02b-5b9e-4da5-a5d2-4b169755dfea",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "event_type": "INQUIRY_CREATED",
+      "metadata": {
+        "contactMode": "CALL"
+      },
+      "created_at": "2026-11-17T18:59:49.323Z"
+    },
+    {
+      "id": "f2e399e2-41fc-4fd3-a3cc-b80da177317c",
+      "inquiry_id": "607ad02b-5b9e-4da5-a5d2-4b169755dfea",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "STAGE_CHANGED",
+      "metadata": {
+        "from": "SITE_VISIT_SCHEDULED",
+        "to": "SITE_VISIT_SCHEDULED"
+      },
+      "created_at": "2026-11-17T18:59:49.427Z"
+    },
+    {
+      "id": "6ca79e04-2133-4a0d-8b72-7b9c0cad0153",
+      "inquiry_id": "607ad02b-5b9e-4da5-a5d2-4b169755dfea",
+      "actor_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "event_type": "NOTE_ADDED",
+      "metadata": null,
+      "created_at": "2026-11-17T18:59:49.483Z"
     }
   ],
   "visits": [
@@ -3748,6 +4696,104 @@
       "notes": "Looking forward to meeting.",
       "created_at": "2026-11-17T18:00:54.734Z",
       "updated_at": "2026-11-17T18:00:54.881Z"
+    },
+    {
+      "id": "5d3b5ce9-396a-4442-8103-5c10d8ebc33c",
+      "inquiry_id": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645",
+      "property_id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "scheduled_at": "2026-11-19T18:24:41.913Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "CONFIRMED",
+      "notes": "Looking forward to meeting.",
+      "created_at": "2026-11-17T18:24:41.919Z",
+      "updated_at": "2026-11-17T18:24:42.015Z"
+    },
+    {
+      "id": "3013f79d-3ef5-467d-abcf-e6e03ad489c4",
+      "inquiry_id": "7ee273f7-6e38-4d15-9bd2-d646b53d242b",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "scheduled_at": "2026-11-19T18:25:32.747Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "CONFIRMED",
+      "notes": "Looking forward to meeting.",
+      "created_at": "2026-11-17T18:25:32.750Z",
+      "updated_at": "2026-11-17T18:25:32.870Z"
+    },
+    {
+      "id": "47f38fb1-58bc-427a-b66b-c4b97dd02d8b",
+      "inquiry_id": "fe280648-21d7-4626-a326-f6091c8b901b",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "buyer_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "scheduled_at": "2026-11-20T18:25:51.895Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "PROPOSED",
+      "notes": "Please confirm afternoon visit availability",
+      "created_at": "2026-11-17T18:25:51.894Z",
+      "updated_at": "2026-11-17T18:25:51.894Z"
+    },
+    {
+      "id": "d3fe24ad-9d15-4951-8df2-0d555476b90a",
+      "inquiry_id": "16a87f08-74cd-4474-8abf-e00ee549cf69",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "buyer_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "handler_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "scheduled_at": "2026-11-20T18:36:52.764Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "PROPOSED",
+      "notes": "Please confirm afternoon visit availability",
+      "created_at": "2026-11-17T18:36:52.769Z",
+      "updated_at": "2026-11-17T18:36:52.769Z"
+    },
+    {
+      "id": "ed65c418-92ae-4329-9842-385d538b9051",
+      "inquiry_id": "817c592a-0ca7-453b-a2a3-b1bfd2ad02d8",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "buyer_id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "handler_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "scheduled_at": "2026-11-20T18:50:33.870Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "PROPOSED",
+      "notes": "Please confirm afternoon visit availability",
+      "created_at": "2026-11-17T18:50:33.875Z",
+      "updated_at": "2026-11-17T18:50:33.875Z"
+    },
+    {
+      "id": "678545c5-992d-43a6-80c0-0845ba5196f9",
+      "inquiry_id": "9be30443-f759-454b-bfed-4dd79e1178bc",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "scheduled_at": "2026-11-19T18:50:55.901Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "CONFIRMED",
+      "notes": "Looking forward to meeting.",
+      "created_at": "2026-11-17T18:50:55.910Z",
+      "updated_at": "2026-11-17T18:50:56.007Z"
+    },
+    {
+      "id": "e19470f2-2c9b-4b16-b4d2-059f2aac2872",
+      "inquiry_id": "ed838786-06e5-413c-9206-89bd126fb36a",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "buyer_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "scheduled_at": "2026-11-19T18:51:27.465Z",
+      "duration_minutes": 30,
+      "mode": "IN_PERSON",
+      "status": "CONFIRMED",
+      "notes": "Looking forward to meeting.",
+      "created_at": "2026-11-17T18:51:27.474Z",
+      "updated_at": "2026-11-17T18:51:27.555Z"
     }
   ],
   "notifications": [
@@ -4030,6 +5076,351 @@
       "data": null,
       "read": false,
       "created_at": "2026-11-17T18:00:54.931Z"
+    },
+    {
+      "id": "0e8dcf56-ba5f-4cac-a365-70d2b61e17b5",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"New Luxury Penthouse Indiranagar\" is now live and searchable.",
+      "data": {
+        "propertyId": "4c01b9ad-55de-4b61-ab46-71b054d31969"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:24:41.759Z"
+    },
+    {
+      "id": "df8a84b3-fc20-4b2a-b793-5375b2063037",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+        "inquiryId": "3dcbcf0a-d653-4d3d-8e31-46d8633c7645"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:24:41.823Z"
+    },
+    {
+      "id": "3d63ba2b-e7f6-482e-a1f8-d30f3b497718",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"New Luxury Penthouse Indiranagar\" on 11/19/2026",
+      "data": {
+        "visitId": "5d3b5ce9-396a-4442-8103-5c10d8ebc33c",
+        "propertyId": "4c01b9ad-55de-4b61-ab46-71b054d31969"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:24:41.997Z"
+    },
+    {
+      "id": "af351574-d4b3-46a4-99f7-fc980d0b481c",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "type": "VISIT_CONFIRMED",
+      "title": "Visit Confirmed",
+      "body": "Your visit has been confirmed for 11/19/2026",
+      "data": null,
+      "read": false,
+      "created_at": "2026-11-17T18:24:42.047Z"
+    },
+    {
+      "id": "28dd54a2-cf1b-4999-9ddc-13d9aa52ce7f",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"New Luxury Penthouse Indiranagar\" is now live and searchable.",
+      "data": {
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:25:32.563Z"
+    },
+    {
+      "id": "3d8cb974-a4fa-485f-b58a-f0461e2e9bb2",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501",
+        "inquiryId": "7ee273f7-6e38-4d15-9bd2-d646b53d242b"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:25:32.621Z"
+    },
+    {
+      "id": "b183d47b-9d30-4bb6-b5cd-c6a099f2c4cc",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"New Luxury Penthouse Indiranagar\" on 11/19/2026",
+      "data": {
+        "visitId": "3013f79d-3ef5-467d-abcf-e6e03ad489c4",
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:25:32.845Z"
+    },
+    {
+      "id": "5f455d41-406f-4a0e-8400-95c56efaab54",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "type": "VISIT_CONFIRMED",
+      "title": "Visit Confirmed",
+      "body": "Your visit has been confirmed for 11/19/2026",
+      "data": null,
+      "read": false,
+      "created_at": "2026-11-17T18:25:32.918Z"
+    },
+    {
+      "id": "614a632d-56b2-4885-aaa1-4c76328acd91",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501",
+        "inquiryId": "fe280648-21d7-4626-a326-f6091c8b901b"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:25:51.861Z"
+    },
+    {
+      "id": "a0b5913f-e1de-4e82-9c4c-3dd0da0f5276",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"New Luxury Penthouse Indiranagar\" on 11/20/2026",
+      "data": {
+        "visitId": "47f38fb1-58bc-427a-b66b-c4b97dd02d8b",
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:25:51.932Z"
+    },
+    {
+      "id": "1adb779c-83fb-464a-b052-40820236b79b",
+      "user_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"Brand New Sunny Villa 359517\" is now live and searchable.",
+      "data": {
+        "propertyId": "4778d4b6-c549-491d-b860-6d83e1d33279"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:25:52.416Z"
+    },
+    {
+      "id": "b12f4f47-024e-436e-b223-ace4e9771069",
+      "user_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"Brand New Sunny Villa 359517\"",
+      "data": {
+        "propertyId": "4778d4b6-c549-491d-b860-6d83e1d33279",
+        "inquiryId": "16a87f08-74cd-4474-8abf-e00ee549cf69"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:36:52.748Z"
+    },
+    {
+      "id": "3eb14443-e6be-49df-9e01-cedbce6867a1",
+      "user_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"Brand New Sunny Villa 359517\" on 11/21/2026",
+      "data": {
+        "visitId": "d3fe24ad-9d15-4951-8df2-0d555476b90a",
+        "propertyId": "4778d4b6-c549-491d-b860-6d83e1d33279"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:36:52.831Z"
+    },
+    {
+      "id": "3af4f606-9d75-4366-acfd-7d2a43883cb6",
+      "user_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"Brand New Sunny Villa 841205\" is now live and searchable.",
+      "data": {
+        "propertyId": "d05aec9e-accd-4a4a-a6f4-fba9780d948d"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:36:53.164Z"
+    },
+    {
+      "id": "c38fe710-d8b2-4795-bb9b-7839fdd7f119",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "82274daf-d2d0-4539-956c-b1519f1f3501",
+        "inquiryId": "8d09c97f-f817-4557-ac0d-8a9b88d4a1ac"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:40:23.230Z"
+    },
+    {
+      "id": "09988a21-8035-4f90-9eea-378663b37d40",
+      "user_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"Brand New Sunny Villa 841205\"",
+      "data": {
+        "propertyId": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+        "inquiryId": "817c592a-0ca7-453b-a2a3-b1bfd2ad02d8"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:50:33.842Z"
+    },
+    {
+      "id": "55698069-6b50-43ef-b9fc-50e05b87f1c3",
+      "user_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"Brand New Sunny Villa 841205\" on 11/21/2026",
+      "data": {
+        "visitId": "ed65c418-92ae-4329-9842-385d538b9051",
+        "propertyId": "d05aec9e-accd-4a4a-a6f4-fba9780d948d"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:50:33.985Z"
+    },
+    {
+      "id": "d536bd35-6083-4bd8-910c-48550461386d",
+      "user_id": "a6e08647-22cd-46c3-ae9a-91560af8614a",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"Brand New Sunny Villa 474740\" is now live and searchable.",
+      "data": {
+        "propertyId": "d572ac24-708f-415c-aab4-070917bfd97d"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:50:34.379Z"
+    },
+    {
+      "id": "fe015274-7018-4ffb-81de-c2fabea4147d",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"New Luxury Penthouse Indiranagar\" is now live and searchable.",
+      "data": {
+        "propertyId": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:50:55.705Z"
+    },
+    {
+      "id": "a4ca0572-9f5e-4ca4-81b5-2bb949ab1296",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+        "inquiryId": "9be30443-f759-454b-bfed-4dd79e1178bc"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:50:55.776Z"
+    },
+    {
+      "id": "1d37880f-bd7e-4e5a-9bb9-b6c44cd42fb9",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"New Luxury Penthouse Indiranagar\" on 11/20/2026",
+      "data": {
+        "visitId": "678545c5-992d-43a6-80c0-0845ba5196f9",
+        "propertyId": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:50:55.950Z"
+    },
+    {
+      "id": "6b3ed40f-688d-4cad-90a8-bc6091f3d0c7",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "type": "VISIT_CONFIRMED",
+      "title": "Visit Confirmed",
+      "body": "Your visit has been confirmed for 11/20/2026",
+      "data": null,
+      "read": false,
+      "created_at": "2026-11-17T18:50:56.064Z"
+    },
+    {
+      "id": "b390e40a-a48d-4c4f-8a6c-f2e5439a63dd",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "LISTING_PUBLISHED",
+      "title": "Listing Published",
+      "body": "Your property \"New Luxury Penthouse Indiranagar\" is now live and searchable.",
+      "data": {
+        "propertyId": "43b3cab5-3477-478d-8909-6c7e432f17fe"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:51:27.230Z"
+    },
+    {
+      "id": "2e6ac91f-2a89-4714-bf66-07b22c861bb1",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry",
+      "body": "New inquiry on \"New Luxury Penthouse Indiranagar\"",
+      "data": {
+        "propertyId": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+        "inquiryId": "ed838786-06e5-413c-9206-89bd126fb36a"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:51:27.312Z"
+    },
+    {
+      "id": "4e73e8f2-b6f2-4e3f-b940-4442d6fffa4f",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "VISIT_REQUESTED",
+      "title": "Visit Requested",
+      "body": "Visit requested for \"New Luxury Penthouse Indiranagar\" on 11/20/2026",
+      "data": {
+        "visitId": "e19470f2-2c9b-4b16-b4d2-059f2aac2872",
+        "propertyId": "43b3cab5-3477-478d-8909-6c7e432f17fe"
+      },
+      "read": true,
+      "created_at": "2026-11-17T18:51:27.518Z"
+    },
+    {
+      "id": "a9f229fc-bea7-4245-9f1e-dd6793e239e8",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "type": "VISIT_CONFIRMED",
+      "title": "Visit Confirmed",
+      "body": "Your visit has been confirmed for 11/20/2026",
+      "data": null,
+      "read": false,
+      "created_at": "2026-11-17T18:51:27.621Z"
+    },
+    {
+      "id": "0dc78d2f-6f82-4734-b5a0-3df7b4d390b4",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "type": "NEW_INQUIRY",
+      "title": "New Inquiry Received",
+      "body": "Rahul Sharma (+919876543210) inquired on \"New Luxury Penthouse Indiranagar\": \"Hello, I am interested in this luxury listing. Please share floor plan and sched...\"",
+      "data": {
+        "propertyId": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+        "inquiryId": "607ad02b-5b9e-4da5-a5d2-4b169755dfea"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:59:49.339Z"
+    },
+    {
+      "id": "1aab1344-33c8-49e6-b4c7-8d1d26308293",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "type": "INQUIRY_SENT",
+      "title": "Inquiry Sent Successfully",
+      "body": "Your inquiry on \"New Luxury Penthouse Indiranagar\" was delivered. The host will contact you shortly via CALL.",
+      "data": {
+        "propertyId": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+        "inquiryId": "607ad02b-5b9e-4da5-a5d2-4b169755dfea"
+      },
+      "read": false,
+      "created_at": "2026-11-17T18:59:49.360Z"
     }
   ],
   "wishlists": [
@@ -4050,6 +5441,36 @@
       "user_id": "eae18ee0-5d56-46d0-a3a3-47fa3c27bb05",
       "property_id": "1f684688-447f-4877-92c4-1f1fb64134c9",
       "created_at": "2026-11-17T17:49:28.907Z"
+    },
+    {
+      "id": "2b3a1651-1e0e-4706-b428-6975a2f0b348",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "property_id": "35fc4824-154d-4ecd-9afc-341d65434039",
+      "created_at": "2026-11-17T18:24:41.632Z"
+    },
+    {
+      "id": "8ffbb472-e13d-42ff-9ff9-0bc3872fa8b7",
+      "user_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "created_at": "2026-11-17T18:25:51.810Z"
+    },
+    {
+      "id": "970d6d14-61cb-4542-9c68-64d4aae135b0",
+      "user_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "created_at": "2026-11-17T18:36:52.712Z"
+    },
+    {
+      "id": "377a5f91-d799-49e5-a294-1348e0e3073c",
+      "user_id": "d8f11984-fc9e-4324-8627-1a2735b018bb",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "created_at": "2026-11-17T18:40:32.592Z"
+    },
+    {
+      "id": "924a5204-847d-4253-8385-c4c78185752a",
+      "user_id": "e595f79f-c9cd-4e00-821c-c25ade34ae99",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "created_at": "2026-11-17T18:50:33.784Z"
     }
   ],
   "leaseRecords": [
@@ -4127,6 +5548,51 @@
       "active": true,
       "created_at": "2026-11-17T18:00:55.045Z",
       "updated_at": "2026-11-17T18:00:55.045Z"
+    },
+    {
+      "id": "b528c13d-a98d-465c-bda6-9ba3d664061e",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "tenant_id": null,
+      "counterparty_name": "Rahul Verma",
+      "counterparty_phone": "+919876543299",
+      "record_type": "SALE",
+      "start_date": "2026-11-17",
+      "end_date": null,
+      "amount": 34500000,
+      "notes": "Final sale agreement signed, registration scheduled next month.",
+      "active": true,
+      "created_at": "2026-11-17T18:25:33.022Z",
+      "updated_at": "2026-11-17T18:25:33.022Z"
+    },
+    {
+      "id": "91e517d8-9ccc-41ac-845f-675eaf018f97",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "tenant_id": null,
+      "counterparty_name": "Rahul Verma",
+      "counterparty_phone": "+919876543299",
+      "record_type": "SALE",
+      "start_date": "2026-11-17",
+      "end_date": null,
+      "amount": 34500000,
+      "notes": "Final sale agreement signed, registration scheduled next month.",
+      "active": true,
+      "created_at": "2026-11-17T18:50:56.143Z",
+      "updated_at": "2026-11-17T18:50:56.143Z"
+    },
+    {
+      "id": "a1e353e8-1d6a-4303-a4ed-6201a47346af",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "tenant_id": null,
+      "counterparty_name": "Rahul Verma",
+      "counterparty_phone": "+919876543299",
+      "record_type": "SALE",
+      "start_date": "2026-11-17",
+      "end_date": null,
+      "amount": 34500000,
+      "notes": "Final sale agreement signed, registration scheduled next month.",
+      "active": true,
+      "created_at": "2026-11-17T18:51:27.705Z",
+      "updated_at": "2026-11-17T18:51:27.705Z"
     }
   ],
   "savedSearches": [
@@ -4189,6 +5655,51 @@
       "radius_km": null,
       "notify": true,
       "created_at": "2026-11-17T18:00:55.068Z"
+    },
+    {
+      "id": "01cb2321-e19d-441e-a63d-1b404249d15d",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "name": "Bangalore 3BHK Rentals",
+      "filters": {
+        "city": "Bangalore",
+        "bedrooms": 3,
+        "purpose": "RENT"
+      },
+      "center_lat": null,
+      "center_lng": null,
+      "radius_km": null,
+      "notify": true,
+      "created_at": "2026-11-17T18:25:33.043Z"
+    },
+    {
+      "id": "06d97c8f-d58c-43ba-8b2d-b668cbd94d93",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "name": "Bangalore 3BHK Rentals",
+      "filters": {
+        "city": "Bangalore",
+        "bedrooms": 3,
+        "purpose": "RENT"
+      },
+      "center_lat": null,
+      "center_lng": null,
+      "radius_km": null,
+      "notify": true,
+      "created_at": "2026-11-17T18:50:56.160Z"
+    },
+    {
+      "id": "e236ffbf-258f-4d3f-a5d0-1465fb49f0a8",
+      "user_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554471",
+      "name": "Bangalore 3BHK Rentals",
+      "filters": {
+        "city": "Bangalore",
+        "bedrooms": 3,
+        "purpose": "RENT"
+      },
+      "center_lat": null,
+      "center_lng": null,
+      "radius_km": null,
+      "notify": true,
+      "created_at": "2026-11-17T18:51:27.723Z"
     }
   ],
   "otps": [
@@ -4281,6 +5792,96 @@
       "attempts": 1,
       "consumed_at": "2026-11-17T18:00:54.249Z",
       "created_at": "2026-11-17T18:00:54.212Z"
+    },
+    {
+      "id": "6bb8e749-bb71-4ef5-a13e-c244b689491b",
+      "user_id": "3448eaf3-1315-49fc-b761-f1e338564c44",
+      "code_hash": "$2a$06$dIh9gX93ld6A5BisO.mym.PYEKuXRwOOC1sPRqaUlxmilN4WBW0ZS",
+      "expires_at": "2026-11-17T18:34:41.490Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:24:41.536Z",
+      "created_at": "2026-11-17T18:24:41.490Z"
+    },
+    {
+      "id": "e262adce-d9cb-4708-ad6f-ab9b8e345667",
+      "user_id": "097a695f-a078-402f-af0a-cb0a34c304af",
+      "code_hash": "$2a$06$a1fZ6EfJndR2yJd8ze9KIOcP5aXqHpdlp90zTHz9.xLhCMy6L.iBi",
+      "expires_at": "2026-11-17T18:35:32.298Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:25:32.331Z",
+      "created_at": "2026-11-17T18:25:32.298Z"
+    },
+    {
+      "id": "276157c3-f3b1-479c-819c-f0c6e4f51170",
+      "user_id": "fe06cd8d-2a3e-4bef-8543-4a0ef76cafda",
+      "code_hash": "$2a$06$SWJKTOLwnVOu79JjufUe8OAGiLV4NtSJN5U06y7Q5Fu59oLcFs95C",
+      "expires_at": "2026-11-17T18:35:51.697Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:25:51.732Z",
+      "created_at": "2026-11-17T18:25:51.697Z"
+    },
+    {
+      "id": "41d4c779-5d22-4bb2-8e90-49c1b55aab69",
+      "user_id": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "code_hash": "$2a$06$VpIlkOIVvn9LyT325HLOUeASrsVM72Frnw0kQi8VQPhEz38JT5fwe",
+      "expires_at": "2026-11-17T18:35:52.178Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:25:52.222Z",
+      "created_at": "2026-11-17T18:25:52.178Z"
+    },
+    {
+      "id": "63e8e750-160c-43cd-9724-2e44b0334625",
+      "user_id": "6269c887-1478-4d2a-a2e8-2797f64e22a8",
+      "code_hash": "$2a$06$XC4FLby63oSwzkEYWfsm3OiVgI.irkKrnitODZyLUkUk676LfK3o6",
+      "expires_at": "2026-11-17T18:46:52.613Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:36:52.657Z",
+      "created_at": "2026-11-17T18:36:52.613Z"
+    },
+    {
+      "id": "18a739a4-8c37-4764-a8f9-858a3a9419d6",
+      "user_id": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "code_hash": "$2a$06$0myx9LT97VmzK.0KdW1sgOhffdX0DorGPnRTHqdKuNAcrG5S2fKXO",
+      "expires_at": "2026-11-17T18:46:53.002Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:36:53.035Z",
+      "created_at": "2026-11-17T18:36:53.002Z"
+    },
+    {
+      "id": "66942d20-7174-4ea2-b92f-34f6e9d20f35",
+      "user_id": "22ad1ab8-7168-4d17-bfd5-bfe96490c479",
+      "code_hash": "$2a$06$f/SNDY85pa8WAcfetkYleenpWUfZnoOVzCIRBN9I.fE3iQcvkY17q",
+      "expires_at": "2026-11-17T18:47:20.477Z",
+      "attempts": 0,
+      "consumed_at": null,
+      "created_at": "2026-11-17T18:37:20.477Z"
+    },
+    {
+      "id": "e1d53d41-2898-41d5-8796-e65f3d87140e",
+      "user_id": "d8f11984-fc9e-4324-8627-1a2735b018bb",
+      "code_hash": "$2a$06$9DMUd1V6O5hz/sA9DC0rn.vW9mtsZcVAAIqGIPm1/NCHp7AZoHFNu",
+      "expires_at": "2026-11-17T18:48:44.045Z",
+      "attempts": 1,
+      "consumed_at": "2026-11-17T18:39:31.635Z",
+      "created_at": "2026-11-17T18:38:44.045Z"
+    },
+    {
+      "id": "5811ab0c-b46c-4d01-b7f3-593d2823a41f",
+      "user_id": "9ef0aaf7-a767-4263-9f21-bb5170486ff8",
+      "code_hash": "$2a$06$sne4pH0GegGwo8USgw3h2uoexXMkEAdFgpKdjfKILOmAq2fYbKF6i",
+      "expires_at": "2026-11-17T19:04:37.130Z",
+      "attempts": 0,
+      "consumed_at": null,
+      "created_at": "2026-11-17T18:49:37.130Z"
+    },
+    {
+      "id": "aaef57d7-edf3-465e-b1e5-915b07befd40",
+      "user_id": "e857300e-9851-49e9-9a91-07a27856d121",
+      "code_hash": "$2a$06$0y679FSBi0U8SESVP2q76.4Po2AZUpPZW9pbYCdVZTuiAsYEK4IU6",
+      "expires_at": "2026-11-17T19:04:53.843Z",
+      "attempts": 0,
+      "consumed_at": "2026-11-17T18:49:53.865Z",
+      "created_at": "2026-11-17T18:49:53.843Z"
     }
   ],
   "statusHistory": [
@@ -4371,6 +5972,118 @@
       "to_status": "ACTIVE",
       "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
       "changed_at": "2026-11-17T18:00:54.508Z"
+    },
+    {
+      "id": "c773623b-32b3-4204-ac79-079863a89f5c",
+      "property_id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:24:41.654Z"
+    },
+    {
+      "id": "32d004c6-6248-4751-bb29-57da3fe338c8",
+      "property_id": "4c01b9ad-55de-4b61-ab46-71b054d31969",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:24:41.737Z"
+    },
+    {
+      "id": "13478e85-df93-47e8-a516-bb87311ee598",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:25:32.468Z"
+    },
+    {
+      "id": "617402c4-6189-4015-91fb-c7649d5d0537",
+      "property_id": "82274daf-d2d0-4539-956c-b1519f1f3501",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:25:32.546Z"
+    },
+    {
+      "id": "ec01209a-2aa7-458d-a38e-e146732afb44",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "changed_at": "2026-11-17T18:25:52.310Z"
+    },
+    {
+      "id": "1e8eff60-a8f3-4c27-8270-63e3823ca45e",
+      "property_id": "4778d4b6-c549-491d-b860-6d83e1d33279",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "5f3aab33-f6af-43d4-9a61-6090460ac25f",
+      "changed_at": "2026-11-17T18:25:52.397Z"
+    },
+    {
+      "id": "39dc2c1b-3a2a-4870-b977-96e0fa9758a7",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "changed_at": "2026-11-17T18:36:53.085Z"
+    },
+    {
+      "id": "e04edb04-e954-444e-bbc4-0c137a09d207",
+      "property_id": "d05aec9e-accd-4a4a-a6f4-fba9780d948d",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "72405fb8-67c2-4ccb-9664-55165e64819b",
+      "changed_at": "2026-11-17T18:36:53.150Z"
+    },
+    {
+      "id": "0afc8c7a-1e70-4142-93ed-778a7089d78a",
+      "property_id": "d572ac24-708f-415c-aab4-070917bfd97d",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "a6e08647-22cd-46c3-ae9a-91560af8614a",
+      "changed_at": "2026-11-17T18:50:34.239Z"
+    },
+    {
+      "id": "0105c918-dc47-4725-a145-2d6654db4ef8",
+      "property_id": "d572ac24-708f-415c-aab4-070917bfd97d",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "a6e08647-22cd-46c3-ae9a-91560af8614a",
+      "changed_at": "2026-11-17T18:50:34.353Z"
+    },
+    {
+      "id": "0773297d-4790-443d-9298-8ba105f2c815",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:50:55.582Z"
+    },
+    {
+      "id": "4c4b6408-fe1a-40a8-a358-facb3dd209b5",
+      "property_id": "03e3ed1b-b25a-4f90-bb68-58ce74e9dea7",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:50:55.678Z"
+    },
+    {
+      "id": "f3a1a695-ddaa-4b4b-b918-053a0262f0bc",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "from_status": null,
+      "to_status": "DRAFT",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:51:27.118Z"
+    },
+    {
+      "id": "df9bc35d-1f8d-40ee-8cc5-91441b334038",
+      "property_id": "43b3cab5-3477-478d-8909-6c7e432f17fe",
+      "from_status": "DRAFT",
+      "to_status": "ACTIVE",
+      "changed_by": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "changed_at": "2026-11-17T18:51:27.208Z"
     }
   ],
   "availabilityRules": [
@@ -4469,6 +6182,102 @@
       "start_time": "10:00",
       "end_time": "16:00",
       "created_at": "2026-11-17T18:00:54.997Z"
+    },
+    {
+      "id": "fb534612-d491-4453-8a14-6ca326373ef1",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:24:42.064Z"
+    },
+    {
+      "id": "50cee538-f68f-44ab-a28b-5ea48806db9e",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:24:42.077Z"
+    },
+    {
+      "id": "77f5caec-ffcc-4168-8014-197cbfa444af",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "created_at": "2026-11-17T18:24:42.088Z"
+    },
+    {
+      "id": "8ec03f71-8b89-4650-95e4-a474ed0cecdf",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:25:32.949Z"
+    },
+    {
+      "id": "375117a6-cf00-41d4-8f4f-0bf4d8b1045e",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:25:32.963Z"
+    },
+    {
+      "id": "edaeae38-95d3-42b3-a337-b3b6a4d1abe6",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "created_at": "2026-11-17T18:25:32.985Z"
+    },
+    {
+      "id": "a58cc19c-5326-44fa-94ba-af83d04863ec",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:50:56.090Z"
+    },
+    {
+      "id": "e3a03985-a7f8-448e-a89f-9d457c4476fa",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:50:56.103Z"
+    },
+    {
+      "id": "2b56cb3c-392a-407f-b9e6-e7bf4b3ee9bf",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "created_at": "2026-11-17T18:50:56.116Z"
+    },
+    {
+      "id": "69706e8e-27e0-4f7d-8165-7f619dc165ec",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:51:27.651Z"
+    },
+    {
+      "id": "3fc0dc99-3b12-4327-9ac4-190e25b761ea",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 2,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "created_at": "2026-11-17T18:51:27.665Z"
+    },
+    {
+      "id": "64e1e7cb-565d-41ba-9171-e665e8c0032e",
+      "handler_id": "e0a9d07f-7a5e-4ff6-99cf-d6a503554472",
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "created_at": "2026-11-17T18:51:27.680Z"
     }
   ],
   "availabilityBlocks": []

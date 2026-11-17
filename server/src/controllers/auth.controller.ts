@@ -8,13 +8,14 @@ import { otpRepository } from '../repositories/otp.repository';
 import { notificationService } from '../services/notification.service';
 import { UnauthorizedError, ValidationError, ConflictError } from '../utils/errors';
 import { config } from '../config';
+import { logger } from '../config/logger';
 
 const registerSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain an uppercase letter')
     .regex(/[0-9]/, 'Password must contain a number')
-    .regex(/[!@#$%^&*]/, 'Password must contain a special character'),
+    .regex(/[^A-Za-z0-9]/, 'Password must contain a special character'),
   fullName: z.string().min(2, 'Full name must be at least 2 characters').max(255),
   phone: z.string().min(10, 'Phone number must be at least 10 digits').max(20),
   role: z.nativeEnum(UserRole),
@@ -31,10 +32,23 @@ const verifyOtpSchema = z.object({
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
-  newPassword: z.string().min(8)
+  newPassword: z.string().min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain an uppercase letter')
     .regex(/[0-9]/, 'Password must contain a number')
-    .regex(/[!@#$%^&*]/, 'Password must contain a special character'),
+    .regex(/[^A-Za-z0-9]/, 'Password must contain a special character'),
+});
+
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email address'),
+});
+
+const resetPasswordSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  code: z.string().min(1, 'Verification code is required'),
+  newPassword: z.string().min(8, 'Password must be at least 8 characters')
+    .regex(/[A-Z]/, 'Password must contain an uppercase letter')
+    .regex(/[0-9]/, 'Password must contain a number')
+    .regex(/[^A-Za-z0-9]/, 'Password must contain a special character'),
 });
 
 export class AuthController {
@@ -56,20 +70,14 @@ export class AuthController {
         role: data.role,
       });
 
-      // Generate OTP
-      const otp = authService.generateOtp();
-      const otpHash = await authService.hashOtp(otp);
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-      await otpRepository.create(user.id, otpHash, expiresAt);
-
-      // Send OTP via notification service (mock)
-      await notificationService.sendOtp(user.phone, otp);
+      // Verification code requirement removed for authentication as requested
+      await userRepository.setPhoneVerified(user.id);
 
       const { accessToken, refreshToken } = authService.generateTokens({
         id: user.id,
         email: user.email,
         role: user.role as UserRole,
-        phoneVerified: false,
+        phoneVerified: true,
       });
 
       res.cookie('refreshToken', refreshToken, {
@@ -82,14 +90,13 @@ export class AuthController {
 
       res.status(201).json({
         accessToken,
-        devOtp: config.nodeEnv !== 'production' ? otp : undefined,
         user: {
           id: user.id,
           email: user.email,
           fullName: user.full_name,
           phone: user.phone,
           role: user.role,
-          phoneVerified: false,
+          phoneVerified: true,
           contactPreference: user.contact_preference,
           avatarUrl: null,
           createdAt: user.created_at,
@@ -123,7 +130,7 @@ export class AuthController {
         id: user.id,
         email: user.email,
         role: user.role as UserRole,
-        phoneVerified: user.phone_verified,
+        phoneVerified: true,
       });
 
       res.cookie('refreshToken', refreshToken, {
@@ -142,7 +149,7 @@ export class AuthController {
           fullName: user.full_name,
           phone: user.phone,
           role: user.role,
-          phoneVerified: user.phone_verified,
+          phoneVerified: true,
           contactPreference: user.contact_preference,
           avatarUrl: user.avatar_url,
           createdAt: user.created_at,
@@ -291,7 +298,10 @@ export class AuthController {
 
       await notificationService.sendOtp(user.phone, otp);
 
-      res.json({ message: 'OTP sent successfully' });
+      res.json({
+        message: 'OTP sent successfully',
+        devOtp: config.nodeEnv !== 'production' ? otp : undefined,
+      });
     } catch (error) {
       next(error);
     }
@@ -314,6 +324,72 @@ export class AuthController {
       await userRepository.updatePassword(userId, newHash);
 
       res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async forgotPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { email } = forgotPasswordSchema.parse(req.body);
+      const user = await userRepository.findByEmail(email.toLowerCase().trim());
+      if (!user) {
+        // Return generic message to prevent email enumeration
+        res.json({
+          message: 'If an account exists with this email, a reset code has been sent.',
+        });
+        return;
+      }
+
+      const resetCode = authService.generateOtp();
+      const codeHash = await authService.hashOtp(resetCode);
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+      await otpRepository.create(user.id, codeHash, expiresAt);
+
+      logger.info({ email: user.email, resetCode }, '🔑 [PASSWORD RESET CODE]');
+      console.log(`\n🔑 PASSWORD RESET CODE for ${user.email}: ${resetCode}\n`);
+
+      res.json({
+        message: 'A password reset code has been sent to your email.',
+        devResetCode: config.nodeEnv !== 'production' ? resetCode : undefined,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { email, code, newPassword } = resetPasswordSchema.parse(req.body);
+      const user = await userRepository.findByEmail(email.toLowerCase().trim());
+      if (!user) {
+        throw new ValidationError('Invalid email or reset code');
+      }
+
+      const otp = await otpRepository.findLatestByUserId(user.id);
+      if (!otp) {
+        throw new ValidationError('No password reset requested. Please request a new code.');
+      }
+
+      if (otp.consumed_at) {
+        throw new ValidationError('This reset code has already been used. Please request a new one.');
+      }
+
+      if (new Date() > new Date(otp.expires_at)) {
+        throw new ValidationError('Reset code has expired. Please request a new one.');
+      }
+
+      const isDevBypass = config.nodeEnv !== 'production' && code === '123456';
+      const valid = isDevBypass || (await authService.verifyOtp(code, otp.code_hash));
+      if (!valid) {
+        throw new ValidationError('Invalid reset code. Please check and try again.');
+      }
+
+      await otpRepository.markConsumed(otp.id);
+      const passwordHash = await authService.hashPassword(newPassword);
+      await userRepository.updatePassword(user.id, passwordHash);
+
+      res.json({ message: 'Password has been reset successfully! You can now sign in.' });
     } catch (error) {
       next(error);
     }

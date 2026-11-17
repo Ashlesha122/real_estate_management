@@ -67,9 +67,9 @@ export const config = {
 
   rateLimit: {
     windowMs: optionalInt('RATE_LIMIT_WINDOW_MS', 900000),
-    maxRequests: optionalInt('RATE_LIMIT_MAX_REQUESTS', 100),
-    authMax: optionalInt('AUTH_RATE_LIMIT_MAX', 20),
-    otpMax: optionalInt('OTP_RATE_LIMIT_MAX', 5),
+    maxRequests: optionalInt('RATE_LIMIT_MAX_REQUESTS', 10000),
+    authMax: optionalInt('AUTH_RATE_LIMIT_MAX', 5000),
+    otpMax: optionalInt('OTP_RATE_LIMIT_MAX', 500),
   },
 
   twilio: {

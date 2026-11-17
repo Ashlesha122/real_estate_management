@@ -21,9 +21,6 @@ export function requireVerified(req: Request, _res: Response, next: NextFunction
     return next(new UnauthorizedError('Authentication required'));
   }
 
-  if (!req.user.phoneVerified) {
-    return next(new ForbiddenError('Phone verification required'));
-  }
-
+  // Verification code requirement removed for authentication as requested
   next();
 }

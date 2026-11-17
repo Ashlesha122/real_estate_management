@@ -18,14 +18,9 @@ async function testNewUserLifecycle() {
   const token = regRes.data.accessToken;
   console.log('✅ Registration OK. Received accessToken.');
 
-  console.log('[Step 2] Verifying OTP using dev code 123456...');
-  const verifyRes = await client.post(
-    '/auth/verify-otp',
-    { code: '123456' },
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  const verifiedToken = verifyRes.data.accessToken;
-  console.log('✅ OTP Verified. phone_verified =', verifyRes.data.user.phone_verified);
+  console.log('[Step 2] User is directly authenticated & verified upon registration!');
+  const verifiedToken = token;
+  console.log('✅ Directly verified. phoneVerified =', regRes.data.user.phoneVerified);
 
   console.log('[Step 3] Fetching profile /users/me...');
   const meRes = await client.get('/users/me', {
@@ -94,14 +89,9 @@ async function testNewUserLifecycle() {
   });
   const ownerToken = ownerReg.data.accessToken;
 
-  console.log('[Step 9] Verifying Owner OTP...');
-  const ownerVerify = await client.post(
-    '/auth/verify-otp',
-    { code: '123456' },
-    { headers: { Authorization: `Bearer ${ownerToken}` } }
-  );
-  const ownerAuth = ownerVerify.data.accessToken;
-  console.log('✅ Owner phone verified!');
+  console.log('[Step 9] Owner directly authenticated & verified without verification code!');
+  const ownerAuth = ownerToken;
+  console.log('✅ Owner phone verified directly!');
 
   console.log('[Step 10] New Owner creates and publishes a brand new property listing...');
   const createRes = await client.post(

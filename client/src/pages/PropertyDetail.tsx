@@ -21,7 +21,8 @@ import {
   Award,
   Landmark,
   BadgePercent,
-  Check
+  Check,
+  Phone
 } from 'lucide-react';
 import { PropertyDetail, HandlingMode, PropertyPurpose } from '../types';
 import { formatPrice, formatPricePerSqft, formatDate, getStatusColor, getPropertyTypeLabel } from '../lib/utils';
@@ -147,10 +148,13 @@ export default function PropertyDetailPage() {
   const reraMatch = property.description?.match(/RERA ID:\s*([A-Za-z0-9\/\-_]+)/i);
   const reraId = reraMatch ? reraMatch[1] : `PRM/KA/RERA/${property.postal_code || '1251'}/${property.id.slice(0, 6).toUpperCase()}`;
 
+  const contactPhone = (isZeroBrokerage ? property.owner_phone : property.broker_phone) || property.owner_phone || '+91 98765 43211';
+  const cleanPhone = contactPhone.replace(/\D/g, '');
+  const formattedPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
   const whatsappMessage = encodeURIComponent(
     `Hello, I found your listing "${property.title}" on EstateFlow. I would like to schedule an inspection visit and discuss details.`
   );
-  const whatsappUrl = `https://wa.me/919876543211?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/${formattedPhone}?text=${whatsappMessage}`;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -565,6 +569,13 @@ export default function PropertyDetailPage() {
                   <p className="text-xs text-estate-500 font-medium">
                     {isZeroBrokerage ? 'Verified Direct Homeowner' : 'EstateFlow Certified Agent'}
                   </p>
+                  <a
+                    href={`tel:${contactPhone}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-700 hover:text-primary-800 mt-1"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-primary-600" />
+                    <span>{contactPhone}</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -616,6 +627,15 @@ export default function PropertyDetailPage() {
                 <MessageSquare className="w-4 h-4" />
                 Send Inquiry Message
               </button>
+
+              {/* Direct Call Button */}
+              <a
+                href={`tel:${contactPhone}`}
+                className="w-full bg-estate-100 hover:bg-estate-200 text-estate-800 py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold transition-colors"
+              >
+                <Phone className="w-4 h-4 text-primary-600" />
+                Call Directly ({contactPhone})
+              </a>
 
               {/* WhatsApp direct chat button */}
               <a

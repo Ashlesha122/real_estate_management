@@ -148,6 +148,33 @@ export class SearchController {
       next(error);
     }
   }
+
+  async getIpLocation(_req: Request, res: Response): Promise<void> {
+    try {
+      const response = await fetch('http://ip-api.com/json', { signal: AbortSignal.timeout(3000) });
+      if (response.ok) {
+        const data: any = await response.json();
+        if (data && data.status === 'success') {
+          res.json({
+            city: data.city || 'Mumbai',
+            region: data.regionName || 'Maharashtra',
+            lat: data.lat || 19.0748,
+            lng: data.lon || 72.8856,
+          });
+          return;
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    res.json({
+      city: 'Mumbai',
+      region: 'Maharashtra',
+      lat: 19.0748,
+      lng: 72.8856,
+    });
+  }
 }
 
 export const searchController = new SearchController();

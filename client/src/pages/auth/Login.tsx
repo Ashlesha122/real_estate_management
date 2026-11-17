@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { Building2, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { Building2, Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -14,30 +15,23 @@ export default function Login() {
 
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
-  const handleQuickLogin = async (demoEmail: string) => {
-    setEmail(demoEmail);
-    setPassword('Password123!');
-    try {
-      setLoading(true);
-      await login(demoEmail, 'Password123!');
-      toast.success('Welcome back!');
-      navigate(from, { replace: true });
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Invalid credentials');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(email, password);
-      toast.success('Welcome back!');
+      await login(email.trim().toLowerCase(), password);
+      toast.success('Signed in successfully!');
       navigate(from, { replace: true });
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Invalid credentials');
+      const responseData = err.response?.data;
+      if (responseData?.details) {
+        const issues = Object.values(responseData.details)
+          .flat()
+          .join('. ');
+        toast.error(issues || 'Login failed');
+      } else {
+        toast.error(responseData?.message || 'Invalid email or password');
+      }
     } finally {
       setLoading(false);
     }
@@ -55,8 +49,8 @@ export default function Login() {
               Estate<span className="text-primary-600">Flow</span>
             </span>
           </Link>
-          <h2 className="text-xl font-bold text-estate-900">Welcome Back</h2>
-          <p className="text-xs text-estate-500 mt-1">Sign in to manage your properties, leads, and visits</p>
+          <h2 className="text-xl font-bold text-estate-900">Sign In to Your Account</h2>
+          <p className="text-xs text-estate-500 mt-1">Enter your verified credentials to access your properties & leads</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -71,8 +65,9 @@ export default function Login() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="Enter your email address"
                 className="input-field pl-10 text-sm"
+                autoComplete="email"
               />
             </div>
           </div>
@@ -82,17 +77,32 @@ export default function Login() {
               <label className="text-xs font-semibold uppercase text-estate-600">
                 Password
               </label>
+              <Link
+                to="/forgot-password"
+                className="text-xs text-primary-600 hover:text-primary-700 font-semibold"
+              >
+                Forgot password?
+              </Link>
             </div>
             <div className="relative">
               <Lock className="w-4 h-4 text-estate-400 absolute left-3.5 top-3" />
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="input-field pl-10 text-sm"
+                placeholder="Enter your password"
+                className="input-field pl-10 pr-10 text-sm"
+                autoComplete="current-password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-2.5 text-estate-400 hover:text-estate-600"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
@@ -115,43 +125,11 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="mt-6 pt-5 border-t border-estate-100">
-          <p className="text-[11px] font-semibold text-estate-500 uppercase tracking-wider text-center mb-2.5">
-            Quick Demo Sign-In
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleQuickLogin('owner@estateflow.com')}
-              className="px-2 py-2 text-xs font-medium rounded-lg border border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100 transition-colors text-center disabled:opacity-50"
-            >
-              🏢 Owner
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleQuickLogin('buyer@estateflow.com')}
-              className="px-2 py-2 text-xs font-medium rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors text-center disabled:opacity-50"
-            >
-              🏠 Buyer
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => handleQuickLogin('broker@estateflow.com')}
-              className="px-2 py-2 text-xs font-medium rounded-lg border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors text-center disabled:opacity-50"
-            >
-              🤝 Broker
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-5 pt-4 border-t border-estate-100 text-center">
+        <div className="mt-6 pt-6 border-t border-estate-100 text-center">
           <p className="text-xs text-estate-600">
-            Don't have an account yet?{' '}
+            Don't have an account?{' '}
             <Link to="/register" className="font-semibold text-primary-600 hover:text-primary-700">
-              Create an account
+              Create an Account
             </Link>
           </p>
         </div>

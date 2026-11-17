@@ -7,10 +7,10 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: { email: string; password: string; fullName: string; phone: string; role: UserRole }) => Promise<void>;
+  register: (data: { email: string; password: string; fullName: string; phone: string; role: UserRole }) => Promise<{ accessToken: string; devOtp?: string; user: UserPublic }>;
   logout: () => Promise<void>;
   verifyOtp: (code: string) => Promise<void>;
-  resendOtp: () => Promise<void>;
+  resendOtp: () => Promise<{ message: string; devOtp?: string }>;
   updateUser: (user: UserPublic) => void;
 }
 
@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { data } = await api.post('/auth/register', regData);
     localStorage.setItem('accessToken', data.accessToken);
     setUser(data.user);
+    return data;
   };
 
   const logout = async () => {
@@ -63,7 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const resendOtp = async () => { await api.post('/auth/resend-otp'); };
+  const resendOtp = async () => {
+    const { data } = await api.post('/auth/resend-otp');
+    return data;
+  };
   const updateUser = (u: UserPublic) => setUser(u);
 
   return (

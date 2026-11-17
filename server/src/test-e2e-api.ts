@@ -78,14 +78,11 @@ async function runTests() {
     newUserToken = res.data.accessToken;
   });
 
-  await test('Verify OTP for new user with dev bypass code 123456', async () => {
-    const res = await axios.post(
-      `${BASE}/auth/verify-otp`,
-      { code: '123456' },
-      { headers: { Authorization: `Bearer ${newUserToken}` } }
-    );
-    if (!res.data.accessToken) throw new Error('Failed OTP verification');
-    newUserToken = res.data.accessToken;
+  await test('Direct authentication without verification code', async () => {
+    const res = await axios.get(`${BASE}/users/me`, {
+      headers: { Authorization: `Bearer ${newUserToken}` },
+    });
+    if (res.data.phoneVerified !== true) throw new Error('User not directly verified');
   });
 
   await test('Fetch current user profile /users/me', async () => {

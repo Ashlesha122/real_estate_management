@@ -58,7 +58,7 @@ export async function executeMemoryQuery(text: string, params: unknown[] = []): 
       password_hash: params[2] as string,
       full_name: params[3] as string,
       role: params[4] as string,
-      phone_verified: false,
+      phone_verified: true,
       contact_preference: 'CALL',
       avatar_url: null,
       created_at: new Date(),

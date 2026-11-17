@@ -12,6 +12,7 @@ import Search from './pages/Search';
 import PropertyDetailPage from './pages/PropertyDetail';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
 import VerifyOtp from './pages/auth/VerifyOtp';
 import Profile from './pages/Profile';
 
@@ -31,7 +32,13 @@ import LeaseRecords from './pages/owner/LeaseRecords';
 // Broker
 import BrokerDashboard from './pages/broker/BrokerDashboard';
 
-function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: UserRole[] }) {
+function ProtectedRoute({
+  children,
+  roles,
+}: {
+  children: React.ReactNode;
+  roles?: UserRole[];
+}) {
   const { isAuthenticated, isLoading, user } = useAuth();
   if (isLoading) {
     return (
@@ -67,12 +74,13 @@ export default function App() {
           {/* Public Auth Routes (Redirect to /dashboard if already signed in) */}
           <Route path="/login" element={<PublicAuthRoute><Login /></PublicAuthRoute>} />
           <Route path="/register" element={<PublicAuthRoute><Register /></PublicAuthRoute>} />
+          <Route path="/forgot-password" element={<PublicAuthRoute><ForgotPassword /></PublicAuthRoute>} />
 
           {/* Secure Application Routes (Authentication Required First) */}
           <Route path="/" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
           <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
           <Route path="/properties/:id" element={<ProtectedRoute><PropertyDetailPage /></ProtectedRoute>} />
-          <Route path="/verify" element={<ProtectedRoute><VerifyOtp /></ProtectedRoute>} />
+          <Route path="/verify" element={<Navigate to="/dashboard" replace />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
           {/* Buyer routes */}

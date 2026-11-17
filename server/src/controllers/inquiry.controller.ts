@@ -56,16 +56,50 @@ export class InquiryController {
         eventType: 'INQUIRY_CREATED', metadata: { contactMode: data.contactMode },
       });
 
-      // Notify handler
+      // Notify handler and owner with rich details
+      const buyer = await userRepository.findById(req.user!.id);
+      const buyerName = buyer?.full_name || 'A buyer';
+      const buyerPhone = buyer?.phone ? ` (${buyer.phone})` : '';
+      const snippet = data.message.length > 80 ? `${data.message.substring(0, 80)}...` : data.message;
+
+      // 1. Notify handler (Broker or Owner)
       const handler = await userRepository.findById(handlerId);
       if (handler) {
         await notificationService.sendNotification({
-          userId: handler.id, phone: handler.phone, type: 'NEW_INQUIRY',
-          title: 'New Inquiry', body: `New inquiry on "${property.title}"`,
+          userId: handler.id,
+          phone: handler.phone,
+          type: 'NEW_INQUIRY',
+          title: 'New Inquiry Received',
+          body: `${buyerName}${buyerPhone} inquired on "${property.title}": "${snippet}"`,
           contactPreference: handler.contact_preference,
           data: { propertyId: property.id, inquiryId: inquiry.id },
         });
       }
+
+      // 2. If property is broker-assisted, also notify the owner
+      if (property.owner_id && property.owner_id !== handlerId) {
+        const owner = await userRepository.findById(property.owner_id);
+        if (owner) {
+          await notificationService.sendNotification({
+            userId: owner.id,
+            phone: owner.phone,
+            type: 'NEW_INQUIRY',
+            title: 'New Lead on Your Property',
+            body: `${buyerName} inquired on your listing "${property.title}" (managed by broker)`,
+            contactPreference: owner.contact_preference,
+            data: { propertyId: property.id, inquiryId: inquiry.id },
+          });
+        }
+      }
+
+      // 3. Send confirmation in-app notification to buyer
+      await notificationService.createInAppNotification(
+        req.user!.id,
+        'INQUIRY_SENT',
+        'Inquiry Sent Successfully',
+        `Your inquiry on "${property.title}" was delivered. The host will contact you shortly via ${data.contactMode}.`,
+        { propertyId: property.id, inquiryId: inquiry.id }
+      );
 
       res.status(201).json(inquiry);
     } catch (error) { next(error); }

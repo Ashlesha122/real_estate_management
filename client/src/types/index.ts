@@ -31,6 +31,7 @@ export interface PropertyDetail extends PropertySummary {
   total_floors: number|null; furnishing: FurnishingStatus|null; parking: number|null;
   amenities: string[]; street_address: string|null; postal_code: string|null;
   owner_id: string; broker_id: string|null; owner_name: string; broker_name: string|null;
+  owner_phone?: string|null; broker_phone?: string|null;
   media: PropertyMedia[]; updated_at: string; view_count: number; inquiry_count: number;
   isWishlisted?: boolean;
 }

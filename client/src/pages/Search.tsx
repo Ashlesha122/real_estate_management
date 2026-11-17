@@ -32,6 +32,8 @@ const CITY_COORDS: Record<string, [number, number]> = {
   'Delhi': [77.0984, 28.4682],
   'Hyderabad': [78.3752, 17.4399],
   'Chennai': [80.2435, 13.0163],
+  'Pune': [73.8567, 18.5204],
+  'Kolkata': [88.3639, 22.5726],
 };
 
 export default function Search() {
@@ -47,7 +49,7 @@ export default function Search() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  // Map position state - only moves on user action
+  // Map position state - only moves on explicit user action
   const [mapCenter, setMapCenter] = useState<[number, number]>([77.5946, 12.9716]); // Bengaluru default
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationInput, setLocationInput] = useState(searchParams.get('city') || '');
@@ -68,6 +70,7 @@ export default function Search() {
     zeroBrokerage: searchParams.get('zeroBrokerage') === 'true',
     amenities: searchParams.get('amenities') ? searchParams.get('amenities')!.split(',').filter(Boolean) : [],
     city: searchParams.get('city') || '',
+    locality: searchParams.get('locality') || '',
     sort: searchParams.get('sort') || 'newest',
   });
 
@@ -85,6 +88,7 @@ export default function Search() {
       if (filters.furnishing) params.set('furnishing', filters.furnishing);
       if (filters.zeroBrokerage) params.set('zeroBrokerage', 'true');
       if (filters.city) params.set('city', filters.city);
+      if (filters.locality) params.set('locality', filters.locality);
       if (filters.amenities.length > 0) params.set('amenities', filters.amenities.join(','));
 
       // GPS location filter
@@ -119,12 +123,18 @@ export default function Search() {
   useEffect(() => {
     if (filters.city && CITY_COORDS[filters.city]) {
       setMapCenter(CITY_COORDS[filters.city]);
+      setLocationInput(filters.city);
     }
   }, [filters.city]);
 
   const handleFilterChange = (newFilters: FilterState) => {
     setFilters(newFilters);
     setPage(1);
+
+    if (newFilters.city && CITY_COORDS[newFilters.city]) {
+      setMapCenter(CITY_COORDS[newFilters.city]);
+      setLocationInput(newFilters.city);
+    }
 
     // Update URL query params with ALL filters preserved
     const params = new URLSearchParams();
@@ -137,6 +147,7 @@ export default function Search() {
     if (newFilters.furnishing) params.set('furnishing', newFilters.furnishing);
     if (newFilters.zeroBrokerage) params.set('zeroBrokerage', 'true');
     if (newFilters.city) params.set('city', newFilters.city);
+    if (newFilters.locality) params.set('locality', newFilters.locality);
     if (newFilters.amenities && newFilters.amenities.length > 0) {
       params.set('amenities', newFilters.amenities.join(','));
     }
@@ -156,6 +167,7 @@ export default function Search() {
       zeroBrokerage: false,
       amenities: [],
       city: '',
+      locality: '',
       sort: 'newest',
     };
     setFilters(empty);
@@ -187,8 +199,53 @@ export default function Search() {
   const handleLocateMe = (coords: { lat: number; lng: number }) => {
     setUserLocation(coords);
     setMapCenter([coords.lng, coords.lat]);
-    setLocationInput('My Current Location');
-    toast.success('Showing properties nearest to your location!');
+    setLocationInput('Near My Location');
+    toast.success('Found your location! Showing nearby properties.');
+  };
+
+  const handleFetchLocation = async () => {
+    toast.info('Detecting your location...');
+
+    // 1. Try browser device geolocation first
+    if (navigator.geolocation) {
+      const getGpsPosition = () =>
+        new Promise<{ lat: number; lng: number }>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+            (err) => reject(err),
+            { timeout: 3500, enableHighAccuracy: false, maximumAge: 60000 }
+          );
+        });
+
+      try {
+        const coords = await getGpsPosition();
+        handleLocateMe(coords);
+        return;
+      } catch (err) {
+        console.warn('GPS location unavailable, trying network/IP location...', err);
+      }
+    }
+
+    // 2. Network/IP Location Fallback
+    try {
+      const res = await api.get('/search/ip-location');
+      if (res.data?.lat && res.data?.lng) {
+        const cityName = res.data.city || 'Mumbai';
+        setUserLocation({ lat: res.data.lat, lng: res.data.lng });
+        setMapCenter([res.data.lng, res.data.lat]);
+        setLocationInput(cityName);
+        handleFilterChange({ ...filters, city: cityName });
+        toast.success(`Found your location: ${cityName}! Showing nearby properties.`);
+        return;
+      }
+    } catch (e) {
+      console.warn('IP location fetch failed:', e);
+    }
+
+    // 3. Fallback to Mumbai or current selected city
+    const fallbackCity = filters.city || 'Mumbai';
+    handleCitySelect(fallbackCity);
+    toast.info(`Showing properties in ${fallbackCity}.`);
   };
 
   const handleBboxChange = async (bbox: { north: number; south: number; east: number; west: number }) => {
@@ -293,18 +350,7 @@ export default function Search() {
           {/* Quick GPS Near Me Button */}
           <button
             type="button"
-            onClick={() => {
-              if (!navigator.geolocation) {
-                toast.error('Geolocation is not supported by your browser');
-                return;
-              }
-              toast.info('Retrieving GPS coordinates...');
-              navigator.geolocation.getCurrentPosition(
-                (pos) => handleLocateMe({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-                (err) => toast.error('Could not get GPS location: ' + err.message),
-                { timeout: 8000, enableHighAccuracy: true }
-              );
-            }}
+            onClick={handleFetchLocation}
             className={`px-3.5 py-2.5 rounded-xl border text-xs font-bold flex items-center gap-1.5 transition-all flex-shrink-0 ${
               userLocation
                 ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PropertyPurpose, PropertyType, FurnishingStatus, AMENITIES } from '../../types';
-import { Filter, X, RotateCcw, ShieldCheck } from 'lucide-react';
+import { Filter, X, RotateCcw, ShieldCheck, MapPin } from 'lucide-react';
 
 export interface FilterState {
   purpose?: string;
@@ -13,6 +13,7 @@ export interface FilterState {
   zeroBrokerage?: boolean;
   amenities: string[];
   city?: string;
+  locality?: string;
   sort?: string;
 }
 
@@ -68,6 +69,43 @@ export default function PropertyFilters({
             Reset all
           </button>
         )}
+      </div>
+
+      {/* Location Filter: City & Locality */}
+      <div className="space-y-3 pb-5 border-b border-estate-200">
+        <div>
+          <label className="block text-xs font-semibold uppercase text-estate-600 mb-1.5 flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-primary-600" />
+            City / Metro
+          </label>
+          <select
+            value={filters.city || ''}
+            onChange={(e) => handleTextChange('city', e.target.value)}
+            className="input-field text-sm"
+          >
+            <option value="">All Indian Cities</option>
+            <option value="Bengaluru">Bengaluru</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Delhi NCR">Delhi NCR</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Pune">Pune</option>
+            <option value="Kolkata">Kolkata</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase text-estate-600 mb-1.5">
+            Locality / Area
+          </label>
+          <input
+            type="text"
+            placeholder="e.g. Indiranagar, Bandra, Whitefield"
+            value={filters.locality || ''}
+            onChange={(e) => handleTextChange('locality', e.target.value)}
+            className="input-field text-xs"
+          />
+        </div>
       </div>
 
       {/* Purpose Toggle */}

@@ -12,5 +12,7 @@ router.post('/logout', authenticate, (req, res) => authController.logout(req, re
 router.post('/verify-otp', authenticate, otpLimiter, (req, res, next) => authController.verifyOtp(req, res, next));
 router.post('/resend-otp', authenticate, otpLimiter, (req, res, next) => authController.resendOtp(req, res, next));
 router.post('/change-password', authenticate, (req, res, next) => authController.changePassword(req, res, next));
+router.post('/forgot-password', authLimiter, (req, res, next) => authController.forgotPassword(req, res, next));
+router.post('/reset-password', authLimiter, (req, res, next) => authController.resetPassword(req, res, next));
 
 export default router;

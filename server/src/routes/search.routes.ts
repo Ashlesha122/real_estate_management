@@ -13,6 +13,7 @@ const optionalAuth = (req: any, res: any, next: any) => {
   next();
 };
 
+router.get('/ip-location', (req, res) => searchController.getIpLocation(req, res));
 router.get('/', optionalAuth, (req, res, next) => searchController.search(req, res, next));
 router.get('/bbox', optionalAuth, (req, res, next) => searchController.searchBBox(req, res, next));
 
